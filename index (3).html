@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Акыйкат AI — Кыргызстандын санариптик юристи</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
+        }
+        
+        .gradient-btn {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+        
+        .gradient-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 140px;
+            height: 36px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 3px);
+            height: 30px;
+            background: white;
+            border-radius: 15px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .toggle-switch.ru::before {
+            left: calc(50%);
+        }
+        
+        .toggle-labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+        
+        .toggle-label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            transition: color 0.3s;
+            z-index: 1;
+        }
+        
+        .toggle-switch:not(.ru) .toggle-label:first-child {
+            color: #1e3a8a;
+        }
+        
+        .toggle-switch:not(.ru) .toggle-label:last-child {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .toggle-switch.ru .toggle-label:first-child {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .toggle-switch.ru .toggle-label:last-child {
+            color: #1e3a8a;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        @media (min-width: 1024px) {
+            .sidebar {
+                transform: translateX(0);
+                position: relative;
+            }
+            
+            .sidebar.desktop-closed {
+                transform: translateX(-100%);
+                position: fixed;
+            }
+        }
+        
+        .chat-item {
+            transition: all 0.2s ease;
+        }
+        
+        .chat-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .chat-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-left: 3px solid #3b82f6;
+        }
+        
+        /* Loading Animation */
+        .skeleton {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .loader-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .loader-dots span {
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        
+        .loader-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loader-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loader-dots span:nth-child(3) { animation-delay: 0s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Fade In */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Response Formatting */
+        .response-text {
+            line-height: 1.9;
+        }
+        
+        .response-text p {
+            margin-bottom: 1rem;
+        }
+        
+        .response-text strong {
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+        
+        .response-text ul, .response-text ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .response-text li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .response-text h3, .response-text h4 {
+            color: #1e3a8a;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .response-text code {
+            background: #eff6ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #1e40af;
+        }
+        
+        .response-text blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            background: #eff6ff;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Quick buttons scroll */
+        .quick-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .quick-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Touch feedback */
+        .touch-btn {
+            transition: transform 0.1s, opacity 0.1s;
+        }
+        
+        .touch-btn:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+        
+        /* Pulse animation for status */
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Scrollbar for sidebar */
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        
+        /* Message bubbles */
+        .user-message {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        
+        .ai-message {
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex">
+    <!-- Sidebar - Chat History -->
+    <aside id="sidebar" class="sidebar fixed lg:relative inset-y-0 left-0 w-72 bg-white border-r border-gray-200 z-40 flex flex-col">
+        <!-- Sidebar Header -->
+        <div class="p-4 border-b border-gray-100">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-gray-800" data-i18n="chatHistory">Чаттар тарыхы</span>
+                </div>
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg touch-btn">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- New Chat Button -->
+            <button onclick="startNewChat()" class="w-full flex items-center gap-3 px-4 py-3 gradient-btn text-white rounded-xl font-semibold touch-btn hover:shadow-lg transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                <span data-i18n="newChat">Жаңы чат</span>
+            </button>
+        </div>
+        
+        <!-- Chat List -->
+        <div id="chatList" class="flex-1 overflow-y-auto sidebar-scroll p-3 space-y-1">
+            <!-- Chats will be populated dynamically -->
+        </div>
+        
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="clearAllChats()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-xl text-sm font-medium transition-colors touch-btn">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                <span data-i18n="clearAll">Баарын өчүрүү</span>
+            </button>
+        </div>
+    </aside>
+    
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-h-screen">
+        <!-- Header -->
+        <header class="gradient-bg text-white py-4 px-4 shadow-xl sticky top-0 z-20">
+            <div class="max-w-5xl mx-auto">
+                <div class="flex items-center justify-between">
+                    <!-- Left: Hamburger + Logo -->
+                    <div class="flex items-center gap-3">
+                        <!-- Sidebar Toggle (Hamburger) -->
+                        <button onclick="toggleSidebar()" class="p-2 hover:bg-white/10 rounded-xl transition-colors touch-btn" title="Toggle Sidebar">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- Logo -->
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                                </svg>
+                            </div>
+                            <div class="hidden sm:block">
+                                <h1 class="text-lg sm:text-xl font-extrabold tracking-tight">Акыйкат AI</h1>
+                                <p class="text-blue-200 text-xs sm:text-sm font-medium" data-i18n="tagline">Адилеттик ар бирөө үчүн</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Controls -->
+                    <div class="flex items-center gap-2 sm:gap-4">
+                        <!-- Language Toggle -->
+                        <div class="toggle-switch" id="langToggle" onclick="toggleLanguage()">
+                            <div class="toggle-labels">
+                                <span class="toggle-label">KG</span>
+                                <span class="toggle-label">RU</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 max-w-5xl mx-auto px-4 py-6 sm:py-10 w-full">
+            <!-- Welcome Section (shown when no active chat) -->
+            <div id="welcomeSection">
+                <div class="text-center mb-8 sm:mb-10">
+                    <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                        <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
+                        <span data-i18n="online">Онлайн жана акысыз</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 sm:mb-4 leading-tight px-2">
+                        <span data-i18n="title">Кыргыз Республикасынын мыйзамдары боюнча санариптик юристиңиз</span>
+                    </h2>
+                    <p class="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4" data-i18n="subtitle">
+                        Конституция жана КР кодекстеринин негизинде акысыз юридикалык консультация. Кыргызча же орусча суроо бериңиз.
+                    </p>
+                </div>
+
+                <!-- Quick Questions -->
+                <div class="mb-8">
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 text-center" data-i18n="popularQuestions">
+                        Көп берилүүчү суроолор
+                    </h3>
+                    <div class="quick-scroll -mx-4 px-4">
+                        <div class="flex gap-3 min-w-max pb-2">
+                            <button onclick="setQuestion('Балага сүйүнчү жөлөкпулун кантип алса болот? Кандай документтер керек?')" 
+                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">👶</span>
+                                    <div class="text-left">
+                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q1title">Балага сүйүнчү</p>
+                                        <p class="text-xs text-gray-500" data-i18n="q1desc">Жөлөкпул алуу</p>
+                                    </div>
+                                </div>
+                            </button>
+                            
+                            <button onclick="setQuestion('Алимент кантип алса болот? Сотко кайрылуу тартиби кандай?')" 
+                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">👨‍👩‍👧</span>
+                                    <div class="text-left">
+                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q2title">Алимент алуу</p>
+                                        <p class="text-xs text-gray-500" data-i18n="q2desc">Үй-бүлө укугу</p>
+                                    </div>
+                                </div>
+                            </button>
+                            
+                            <button onclick="setQuestion('Мени иштен мыйзамсыз бошотушту. Менин укуктарым кандай? Кайда кайрылсам болот?')" 
+                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">⚖️</span>
+                                    <div class="text-left">
+                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q3title">Иштен бошотуу</p>
+                                        <p class="text-xs text-gray-500" data-i18n="q3desc">Эмгек укуктары</p>
+                                    </div>
+                                </div>
+                            </button>
+                            
+                            <button onclick="setQuestion('Жол кыймыл эрежелерин бузгандык үчүн кандай айып пулдар бар?')" 
+                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">🚗</span>
+                                    <div class="text-left">
+                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q4title">ЖКЭ айыптары</p>
+                                        <p class="text-xs text-gray-500" data-i18n="q4desc">Жол эрежелери</p>
+                                    </div>
+                                </div>
+                            </button>
+                            
+                            <button onclick="setQuestion('ЖЧК же ИП кантип каттаса болот? Кандай кадамдар керек?')" 
+                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-2xl">📋</span>
+                                    <div class="text-left">
+                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q5title">Бизнес каттоо</p>
+                                        <p class="text-xs text-gray-500" data-i18n="q5desc">ЖЧК / ИП</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div id="chatMessages" class="space-y-4 mb-6 hidden">
+                <!-- Messages will be populated here -->
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8 hidden mb-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="loader-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div>
+                        <p class="text-gray-700 font-semibold" data-i18n="analyzing">КР мыйзамдарын талдоодо...</p>
+                        <p class="text-gray-400 text-sm" data-i18n="wait">Бир аз күтө туруңуз</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="skeleton h-4 w-full"></div>
+                    <div class="skeleton h-4 w-11/12"></div>
+                    <div class="skeleton h-4 w-4/5"></div>
+                    <div class="skeleton h-4 w-9/12"></div>
+                </div>
+            </div>
+
+            <!-- Question Input -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="p-5 sm:p-6">
+                    <textarea 
+                        id="question" 
+                        rows="3" 
+                        class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all resize-none text-gray-800 placeholder-gray-400 text-base"
+                        data-i18n-placeholder="inputPlaceholder"
+                        placeholder="Мисалы: Иш берүүчүм айлыгымды 2 айдан бери бербей жатат. Мен эмне кылсам болот?"
+                    ></textarea>
+                    
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-4">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <span data-i18n="privacy">Маалыматтарыңыз сакталбайт</span>
+                        </div>
+                        <button 
+                            onclick="askQuestion()" 
+                            id="askButton"
+                            class="touch-btn w-full sm:w-auto gradient-btn text-white font-bold rounded-2xl px-8 py-4 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                        >
+                            <span data-i18n="submitBtn">Жөнөтүү</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 py-4 px-4 mt-auto">
+            <div class="max-w-5xl mx-auto text-center">
+                <div class="flex items-center justify-center gap-2 mb-1">
+                    <span class="text-xl">🇰🇬</span>
+                    <p class="text-gray-600 text-sm font-medium" data-i18n="footerTitle">
+                        Акыйкат AI — Кыргызстандын жарандары үчүн долбоор
+                    </p>
+                </div>
+                <p class="text-gray-400 text-xs" data-i18n="footerDisclaimer">
+                    Маалымат маалымдама мүнөзүндө берилет. Юридикалык маанилүү аракеттер үчүн адвокатка кайрылыңыз.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-xl z-50 hidden text-sm font-medium">
+        <span id="toastText"></span>
+    </div>
+
+    <script>
+        // ========== CONFIG ==========
+        const DEFAULT_API_KEY = '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';
+        const MODEL = 'tngtech/deepseek-r1t-chimera:free';
+        const CHATS_STORAGE_KEY = 'akyykat_chats';
+        const ACTIVE_CHAT_KEY = 'akyykat_active_chat';
+        
+        // ========== i18n TRANSLATIONS ==========
+        const translations = {
+            ky: {
+                tagline: "Адилеттик ар бирөө үчүн",
+                chatHistory: "Чаттар тарыхы",
+                newChat: "Жаңы чат",
+                noChats: "Чаттар жок",
+                startFirst: "Биринчи суроону бериңиз",
+                clearAll: "Баарын өчүрүү",
+                online: "Онлайн жана акысыз",
+                title: "Кыргыз Республикасынын мыйзамдары боюнча санариптик юристиңиз",
+                subtitle: "Конституция жана КР кодекстеринин негизинде акысыз юридикалык консультация. Кыргызча же орусча суроо бериңиз.",
+                popularQuestions: "Көп берилүүчү суроолор",
+                q1title: "Балага сүйүнчү",
+                q1desc: "Жөлөкпул алуу",
+                q2title: "Алимент алуу",
+                q2desc: "Үй-бүлө укугу",
+                q3title: "Иштен бошотуу",
+                q3desc: "Эмгек укуктары",
+                q4title: "ЖКЭ айыптары",
+                q4desc: "Жол эрежелери",
+                q5title: "Бизнес каттоо",
+                q5desc: "ЖЧК / ИП",
+                inputPlaceholder: "Мисалы: Иш берүүчүм айлыгымды 2 айдан бери бербей жатат. Мен эмне кылсам болот?",
+                privacy: "Маалыматтарыңыз сакталбайт",
+                submitBtn: "Жөнөтүү",
+                analyzing: "КР мыйзамдарын талдоодо...",
+                wait: "Бир аз күтө туруңуз",
+                footerTitle: "Акыйкат AI — Кыргызстандын жарандары үчүн долбоор",
+                footerDisclaimer: "Маалымат маалымдама мүнөзүндө берилет. Юридикалык маанилүү аракеттер үчүн адвокатка кайрылыңыз.",
+                apiModalTitle: "API жөндөөлөрү",
+                apiModalDesc: "API ачкычы демейки боюнча орнотулган. Өзүңүздүн OpenRouter.ai ачкычыңызды колдонсоңуз болот.",
+                defaultBtn: "Демейки",
+                saveBtn: "Сактоо",
+                apiSecurityNote: "🔒 Ачкыч сиздин браузериңизде гана сакталат",
+                toastCopied: "Көчүрүлдү",
+                toastCleared: "Чаттар өчүрүлдү",
+
+                toastEmpty: "Суроону жазыңыз",
+                toastNewChat: "Жаңы чат башталды",
+                langKy: "🇰🇬 Кыргызча",
+                langRu: "🇷🇺 Орусча",
+                you: "Сиз",
+                deleteChat: "Чатты өчүрүү",
+                today: "Бүгүн",
+                yesterday: "Кечээ",
+                confirmClearAll: "Бардык чаттарды өчүрүү?",
+                errorTitle: "Ката",
+                errorNetwork: "Тармак катасы. Интернетти текшериңиз.",
+                errorApi: "API катасы"
+            },
+            ru: {
+                tagline: "Справедливость для каждого",
+                chatHistory: "История чатов",
+                newChat: "Новый чат",
+                noChats: "Нет чатов",
+                startFirst: "Задайте первый вопрос",
+                clearAll: "Удалить все",
+                online: "Онлайн и бесплатно",
+                title: "Ваш цифровой юрист по законам Кыргызской Республики",
+                subtitle: "Бесплатная юридическая консультация на основе Конституции и кодексов КР. Задайте вопрос на кыргызском или русском языке.",
+                popularQuestions: "Популярные вопросы",
+                q1title: "Балага сүйүнчү",
+                q1desc: "Получение пособия",
+                q2title: "Алименты",
+                q2desc: "Семейное право",
+                q3title: "Увольнение",
+                q3desc: "Трудовые права",
+                q4title: "Штрафы ПДД",
+                q4desc: "Правила дорожного движения",
+                q5title: "Регистрация бизнеса",
+                q5desc: "ООО / ИП",
+                inputPlaceholder: "Например: Работодатель не платит зарплату уже 2 месяца. Что мне делать?",
+                privacy: "Ваши данные не сохраняются",
+                submitBtn: "Отправить",
+                analyzing: "Анализирую законы КР...",
+                wait: "Подождите немного",
+                footerTitle: "Акыйкат AI — проект для граждан Кыргызстана",
+                footerDisclaimer: "Информация носит справочный характер. Для юридически значимых действий обратитесь к адвокату.",
+                apiModalTitle: "Настройки API",
+                apiModalDesc: "API-ключ уже настроен по умолчанию. Вы можете использовать свой ключ от OpenRouter.ai.",
+                defaultBtn: "По умолчанию",
+                saveBtn: "Сохранить",
+                apiSecurityNote: "🔒 Ключ хранится только в вашем браузере",
+                toastCopied: "Скопировано",
+                toastCleared: "Чаты удалены",
+
+                toastEmpty: "Введите вопрос",
+                toastNewChat: "Новый чат создан",
+                langKy: "🇰🇬 Кыргызча",
+                langRu: "🇷🇺 Русский",
+                you: "Вы",
+                deleteChat: "Удалить чат",
+                today: "Сегодня",
+                yesterday: "Вчера",
+                confirmClearAll: "Удалить все чаты?",
+                errorTitle: "Ошибка",
+                errorNetwork: "Ошибка сети. Проверьте интернет.",
+                errorApi: "Ошибка API"
+            }
+        };
+        
+        // ========== SYSTEM PROMPT ==========
+        const SYSTEM_PROMPT = `Сен — Акыйкат AI, Кыргыз Республикасынын укук боюнча эксперти.
+Ты — Акыйкат AI, эксперт по праву Кыргызской Республики.
+
+📚 БИЛИМ БАЗАСЫ / БАЗА ЗНАНИЙ:
+- Кыргыз Республикасынын Конституциясы / Конституция КР
+- Жарандык кодекси / Гражданский кодекс КР
+- Эмгек кодекси / Трудовой кодекс КР  
+- Үй-бүлө кодекси / Семейный кодекс КР
+- Жазык кодекси / Уголовный кодекс КР
+- Укук бузуулар жөнүндө кодекс / Кодекс о правонарушениях КР
+- Салык кодекси / Налоговый кодекс КР
+- Административдик мыйзамдар / Административные законы
+
+⚠️ КАТУУ ФИЛЬТР / СТРОГИЙ ФИЛЬТР:
+Эгерде суроо Кыргызстандын мыйзамдарына ТИЕШЕСИ ЖОКСА (мисалы: тамак жасоо, башка өлкөлөрдүн мыйзамдары, программалоо, ойун-зоок ж.б.), анда МИЛДЕТТҮҮ түрдө баш тарт:
+
+Кыргызча жооп: "Кечириңиз, мен бир гана Кыргыз Республикасынын мыйзамдары боюнча жардам берем. Юридикалык суроо берсеңиз, кубаныч менен жардам берем!"
+
+Русский ответ: "Извините, я помогаю только по законам Кыргызской Республики. Если у вас есть юридический вопрос — с радостью помогу!"
+
+📌 ЖООП БЕРҮҮ ЭРЕЖЕЛЕРИ / ПРАВИЛА ОТВЕТОВ:
+
+1. ТИЛДИ АНЫКТА / ОПРЕДЕЛИ ЯЗЫК:
+   - Суроо кыргызча болсо → кыргызча жооп бер
+   - Вопрос на русском → отвечай на русском
+
+2. КЫРГЫЗЧА ЖООП БЕРҮҮДӨ:
+   - Юридикалык терминдерди колдон: ченемдик укуктук актылар, токтом, берене, укук субъектиси
+   - Кодекстерге шилтеме бер: "КР Эмгек кодексинин 150-беренесине ылайык..."
+   - Кадам-кадам план бер
+
+3. ПРИ ОТВЕТЕ НА РУССКОМ:
+   - Используй юридическую терминологию: нормативно-правовые акты, постановление, статья
+   - Ссылайся на кодексы: "Согласно ст. 150 Трудового кодекса КР..."
+   - Давай пошаговый план действий
+
+4. ФОРМАТ ЖООП / ФОРМАТ ОТВЕТА:
+   - Кыскача жана так бол / Будь кратким и точным
+   - Конкреттүү беренелерге шилтеме бер / Ссылайся на конкретные статьи
+   - Практикалык кеңеш бер / Давай практические советы
+
+5. ⚠️ ДИСКЛЕЙМЕР (ар бир жооптун аягында / в конце КАЖДОГО ответа):
+
+Кыргызча: "---\\n📋 **Маанилүү:** Бул маалымат таанышуу үчүн гана берилди. Юридикалык маанилүү аракеттер үчүн адвокатка кайрылууну сунуштайбыз."
+
+Русский: "---\\n📋 **Важно:** Данная информация предоставлена в ознакомительных целях. Для юридически значимых действий рекомендуем обратиться к адвокату."`;
+
+        // ========== STATE ==========
+        let currentLang = localStorage.getItem('akyykat_lang') || 'ky';
+        let chats = [];
+        let activeChatId = null;
+        let sidebarOpen = window.innerWidth >= 1024;
+        
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load chats from localStorage
+            loadChats();
+            
+            // Apply saved language
+            applyLanguage(currentLang);
+            
+            // Update toggle state
+            updateToggleState();
+            
+            // Initialize sidebar state
+            if (window.innerWidth < 1024) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        });
+        
+        // ========== CHAT STORAGE FUNCTIONS ==========
+        function loadChats() {
+            const stored = localStorage.getItem(CHATS_STORAGE_KEY);
+            chats = stored ? JSON.parse(stored) : [];
+            
+            const storedActiveId = localStorage.getItem(ACTIVE_CHAT_KEY);
+            if (storedActiveId && chats.find(c => c.id === storedActiveId)) {
+                activeChatId = storedActiveId;
+                loadChat(activeChatId);
+            }
+            
+            renderChatList();
+        }
+        
+        function saveChats() {
+            localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(chats));
+            if (activeChatId) {
+                localStorage.setItem(ACTIVE_CHAT_KEY, activeChatId);
+            } else {
+                localStorage.removeItem(ACTIVE_CHAT_KEY);
+            }
+        }
+        
+        function createChat(firstMessage) {
+            const chat = {
+                id: Date.now().toString(),
+                title: firstMessage.substring(0, 40) + (firstMessage.length > 40 ? '...' : ''),
+                createdAt: new Date().toISOString(),
+                messages: []
+            };
+            chats.unshift(chat);
+            activeChatId = chat.id;
+            saveChats();
+            renderChatList();
+            return chat;
+        }
+        
+        function getActiveChat() {
+            return chats.find(c => c.id === activeChatId);
+        }
+        
+        function addMessageToChat(role, content) {
+            const chat = getActiveChat();
+            if (chat) {
+                chat.messages.push({
+                    role,
+                    content,
+                    timestamp: new Date().toISOString()
+                });
+                saveChats();
+            }
+        }
+        
+        function renderChatList() {
+            const chatList = document.getElementById('chatList');
+            if (!chatList) return; // Safety check
+            
+            const t = translations[currentLang];
+            const today = new Date().toDateString();
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+            
+            if (chats.length === 0) {
+                chatList.innerHTML = `
+                    <div class="text-center py-8 text-gray-400">
+                        <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        <p class="text-sm">${t.noChats}</p>
+                        <p class="text-xs mt-1">${t.startFirst}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            chats.forEach(chat => {
+                const chatDate = new Date(chat.createdAt).toDateString();
+                let dateLabel = '';
+                if (chatDate === today) {
+                    dateLabel = t.today;
+                } else if (chatDate === yesterday) {
+                    dateLabel = t.yesterday;
+                } else {
+                    dateLabel = new Date(chat.createdAt).toLocaleDateString();
+                }
+                
+                const isActive = chat.id === activeChatId;
+                
+                html += `
+                    <div class="chat-item ${isActive ? 'active' : ''} p-3 rounded-xl cursor-pointer group" onclick="loadChat('${chat.id}')">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex-1 min-w-0">
+                                <p class="font-medium text-gray-800 text-sm truncate">${escapeHtml(chat.title)}</p>
+                                <p class="text-xs text-gray-400 mt-1">${dateLabel}</p>
+                            </div>
+                            <button onclick="event.stopPropagation(); deleteChat('${chat.id}')" 
+                                    class="opacity-0 group-hover:opacity-100 sm:opacity-0 max-sm:opacity-60 p-1.5 hover:bg-red-100 rounded-lg transition-all touch-btn"
+                                    title="${t.deleteChat}">
+                                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            chatList.innerHTML = html;
+        }
+        
+        function loadChat(chatId) {
+            activeChatId = chatId;
+            saveChats();
+            
+            const chat = getActiveChat();
+            if (!chat) return;
+            
+            // Hide welcome, show messages
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('chatMessages').classList.remove('hidden');
+            
+            // Render messages
+            renderMessages(chat.messages);
+            
+            // Update sidebar
+            renderChatList();
+            
+            // Close sidebar on mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        }
+        
+        function renderMessages(messages) {
+            const container = document.getElementById('chatMessages');
+            if (!container) return;
+            
+            const t = translations[currentLang];
+            
+            let html = '';
+            
+            messages.forEach(msg => {
+                if (msg.role === 'user') {
+                    html += `
+                        <div class="flex justify-end fade-in">
+                            <div class="user-message max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-tr-md px-5 py-4 text-white shadow-lg">
+                                <p class="text-xs font-semibold opacity-80 mb-1">${t.you}</p>
+                                <p class="text-sm sm:text-base">${escapeHtml(msg.content)}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Clean message content from any think tags (in case old data has them)
+                    const cleanContent = filterThinkingTags(msg.content);
+                    const lang = detectResponseLanguage(cleanContent);
+                    html += `
+                        <div class="flex justify-start fade-in">
+                            <div class="ai-message max-w-[90%] sm:max-w-[80%] rounded-2xl rounded-tl-md px-5 py-4 shadow-lg">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <div class="w-7 h-7 gradient-bg rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                                        </svg>
+                                    </div>
+                                    <span class="font-bold text-blue-900 text-sm">Акыйкат AI</span>
+                                    <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">${lang.label}</span>
+                                </div>
+                                <div class="response-text text-gray-700 text-sm sm:text-base">${formatMarkdown(cleanContent)}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function startNewChat() {
+            activeChatId = null;
+            saveChats();
+            
+            // Show welcome, hide messages
+            document.getElementById('welcomeSection').classList.remove('hidden');
+            document.getElementById('chatMessages').classList.add('hidden');
+            document.getElementById('chatMessages').innerHTML = '';
+            document.getElementById('question').value = '';
+            
+            renderChatList();
+            showToast(translations[currentLang].toastNewChat);
+            
+            // Close sidebar on mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        }
+        
+        function deleteChat(chatId) {
+            chats = chats.filter(c => c.id !== chatId);
+            
+            if (activeChatId === chatId) {
+                activeChatId = null;
+                document.getElementById('welcomeSection').classList.remove('hidden');
+                document.getElementById('chatMessages').classList.add('hidden');
+            }
+            
+            saveChats();
+            renderChatList();
+        }
+        
+        function clearAllChats() {
+            if (!confirm(translations[currentLang].confirmClearAll)) return;
+            
+            chats = [];
+            activeChatId = null;
+            saveChats();
+            renderChatList();
+            
+            document.getElementById('welcomeSection').classList.remove('hidden');
+            document.getElementById('chatMessages').classList.add('hidden');
+            
+            showToast(translations[currentLang].toastCleared);
+        }
+        
+        // ========== SIDEBAR ==========
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.toggle('desktop-closed');
+            } else {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('hidden');
+                document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+            }
+        }
+        
+        // ========== LANGUAGE FUNCTIONS ==========
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('akyykat_lang', lang);
+            document.documentElement.lang = lang;
+            
+            const t = translations[lang];
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+            
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) {
+                    el.placeholder = t[key];
+                }
+            });
+            
+            document.title = lang === 'ky' 
+                ? 'Акыйкат AI — Кыргызстандын санариптик юристи'
+                : 'Акыйкат AI — Цифровой юрист Кыргызстана';
+            
+            // Re-render chat list with new language
+            renderChatList();
+            
+            // Re-render messages if any
+            const chat = getActiveChat();
+            if (chat) {
+                renderMessages(chat.messages);
+            }
+        }
+        
+        function toggleLanguage() {
+            const newLang = currentLang === 'ky' ? 'ru' : 'ky';
+            setLanguage(newLang);
+        }
+        
+        function setLanguage(lang) {
+            applyLanguage(lang);
+            updateToggleState();
+        }
+        
+        function updateToggleState() {
+            const toggle = document.getElementById('langToggle');
+            if (currentLang === 'ru') {
+                toggle?.classList.add('ru');
+            } else {
+                toggle?.classList.remove('ru');
+            }
+        }
+        
+        // ========== UTILITY FUNCTIONS ==========
+        function setQuestion(text) {
+            document.getElementById('question').value = text;
+            document.getElementById('question').focus();
+        }
+        
+        function detectResponseLanguage(text) {
+            const kyrgyzChars = /[өүңҮҢӨ]/i;
+            const kyrgyzWords = /\b(менин|сенин|анын|болот|эмес|керек|үчүн|менен|жана|бирок|кодекси|беренеси|ылайык|укук|мыйзам)\b/i;
+            
+            if (kyrgyzChars.test(text) || kyrgyzWords.test(text)) {
+                return { code: 'ky', label: translations[currentLang].langKy };
+            }
+            return { code: 'ru', label: translations[currentLang].langRu };
+        }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            toastText.textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2500);
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function filterThinkingTags(text) {
+            if (!text) return '';
+            
+            let cleaned = text;
+            
+            // ===== AGGRESSIVE THINK TAG REMOVAL =====
+            
+            // 1. Standard <think>...</think> (greedy - captures everything between)
+            cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, '');
+            
+            // 2. With any whitespace variations
+            cleaned = cleaned.replace(/<\s*think\s*>[\s\S]*?<\s*\/\s*think\s*>/gi, '');
+            
+            // 3. Unclosed <think> - remove from <think> to end of string
+            cleaned = cleaned.replace(/<think>[\s\S]*/gi, '');
+            
+            // 4. Just opening tag anywhere
+            cleaned = cleaned.replace(/<think>/gi, '');
+            
+            // 5. Just closing tag anywhere  
+            cleaned = cleaned.replace(/<\/think>/gi, '');
+            
+            // 6. With attributes like <think reasoning="...">
+            cleaned = cleaned.replace(/<think[^>]*>[\s\S]*?<\/think>/gi, '');
+            
+            // 7. Self-closing think tags
+            cleaned = cleaned.replace(/<think[^>]*\/>/gi, '');
+            
+            // 8. HTML encoded versions
+            cleaned = cleaned.replace(/&lt;think&gt;[\s\S]*?&lt;\/think&gt;/gi, '');
+            cleaned = cleaned.replace(/&lt;think&gt;/gi, '');
+            cleaned = cleaned.replace(/&lt;\/think&gt;/gi, '');
+            
+            // ===== CLEAN UP =====
+            
+            // Remove multiple consecutive newlines (more than 2)
+            cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+            
+            // Remove leading/trailing whitespace and newlines
+            cleaned = cleaned.trim();
+            
+            // If after all cleaning the text starts with common thinking patterns, remove first paragraph
+            if (cleaned.match(/^(Okay|Хорошо|Давай|Let me|I need to|I should|First,|Сначала|Мне нужно)/i)) {
+                const firstDoubleNewline = cleaned.indexOf('\n\n');
+                if (firstDoubleNewline > 0 && firstDoubleNewline < 200) {
+                    cleaned = cleaned.substring(firstDoubleNewline + 2).trim();
+                }
+            }
+            
+            return cleaned;
+        }
+        
+        function formatMarkdown(text) {
+            if (!text) return '';
+            
+            // ===== CRITICAL: Filter out ALL thinking tags before rendering =====
+            // Apply main filter
+            text = filterThinkingTags(text);
+            
+            // Additional safety: remove any remaining think patterns
+            text = text.replace(/<think[\s\S]*?<\/think>/gi, '');
+            text = text.replace(/<think>[\s\S]*/gi, '');
+            text = text.replace(/<\/?think[^>]*>/gi, '');
+            
+            // Escape HTML FIRST to prevent XSS, but preserve our formatting
+            let escaped = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            
+            // Remove escaped think tags
+            escaped = escaped.replace(/&lt;think&gt;[\s\S]*?&lt;\/think&gt;/gi, '');
+            escaped = escaped.replace(/&lt;think&gt;[\s\S]*/gi, '');
+            escaped = escaped.replace(/&lt;\/?think[^&]*&gt;/gi, '');
+            
+            // Now apply markdown formatting
+            return escaped
+                .replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-100 p-4 rounded-xl overflow-x-auto my-4 text-sm"><code>$1</code></pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/^#### (.*$)/gm, '<h4 class="font-bold text-base text-blue-900 mt-4 mb-2">$1</h4>')
+                .replace(/^### (.*$)/gm, '<h3 class="font-bold text-lg text-blue-900 mt-5 mb-2">$1</h3>')
+                .replace(/^## (.*$)/gm, '<h3 class="font-bold text-xl text-blue-900 mt-6 mb-3">$1</h3>')
+                .replace(/^&gt; (.*$)/gm, '<blockquote class="border-l-4 border-blue-400 pl-4 py-2 my-2 bg-blue-50 rounded-r">$1</blockquote>')
+                .replace(/^\d+\. (.*$)/gm, '<li class="ml-5 mb-2 list-decimal">$1</li>')
+                .replace(/^[-•] (.*$)/gm, '<li class="ml-5 mb-2 list-disc">$1</li>')
+                .replace(/^---$/gm, '<hr class="my-6 border-gray-200">')
+                .replace(/\n/g, '<br>');
+        }
+        
+        // ========== MAIN API CALL ==========
+        async function askQuestion() {
+            const questionInput = document.getElementById('question');
+            const question = questionInput.value.trim();
+            const apiKey = DEFAULT_API_KEY;
+            
+            if (!question) {
+                showToast(translations[currentLang].toastEmpty);
+                return;
+            }
+            
+            const loadingState = document.getElementById('loadingState');
+            const askButton = document.getElementById('askButton');
+            const chatMessages = document.getElementById('chatMessages');
+            const welcomeSection = document.getElementById('welcomeSection');
+            
+            // Create new chat if needed
+            if (!activeChatId) {
+                createChat(question);
+            }
+            
+            // Add user message
+            addMessageToChat('user', question);
+            
+            // Show chat area
+            welcomeSection.classList.add('hidden');
+            chatMessages.classList.remove('hidden');
+            
+            // Render current messages
+            const chat = getActiveChat();
+            renderMessages(chat.messages);
+            
+            // Show loading
+            loadingState.classList.remove('hidden');
+            askButton.disabled = true;
+            questionInput.value = '';
+            
+            // Scroll to loading
+            loadingState.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            
+            try {
+                // Build messages array for API
+                const apiMessages = [
+                    { role: 'system', content: SYSTEM_PROMPT },
+                    ...chat.messages.map(m => ({ role: m.role, content: m.content }))
+                ];
+                
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.href,
+                        'X-Title': 'Akyykat AI - Legal Assistant for Kyrgyzstan'
+                    },
+                    body: JSON.stringify({
+                        model: MODEL,
+                        messages: apiMessages,
+                        max_tokens: 4000,
+                        temperature: 0.3
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error?.message || 'API Error');
+                }
+                
+                let aiResponse = data.choices[0]?.message?.content;
+                
+                if (!aiResponse) {
+                    throw new Error('Empty response');
+                }
+                
+                // ===== CRITICAL: MULTI-PASS THINK TAG REMOVAL =====
+                // DeepSeek/R1 models send reasoning in <think> tags
+                
+                // Pass 1: Main filter function
+                aiResponse = filterThinkingTags(aiResponse);
+                
+                // Pass 2: Additional safety regex
+                aiResponse = aiResponse.replace(/<think[\s\S]*?(?:<\/think>|$)/gi, '');
+                aiResponse = aiResponse.replace(/<\/think>/gi, '');
+                
+                // Pass 3: If still starts with < (potential uncaught tag), clean more aggressively
+                while (aiResponse.startsWith('<') && !aiResponse.startsWith('<strong') && !aiResponse.startsWith('<em') && !aiResponse.startsWith('<p')) {
+                    const closeIdx = aiResponse.indexOf('>');
+                    if (closeIdx > 0 && closeIdx < 50) {
+                        aiResponse = aiResponse.substring(closeIdx + 1);
+                    } else {
+                        break;
+                    }
+                }
+                
+                // Pass 4: Remove any remaining think-related content
+                aiResponse = aiResponse.replace(/\[thinking\][\s\S]*?\[\/thinking\]/gi, '');
+                aiResponse = aiResponse.replace(/\*\*Thinking:\*\*[\s\S]*?\n\n/gi, '');
+                
+                // Final cleanup
+                aiResponse = aiResponse.replace(/^\s*\n+/, '').trim();
+                
+                // Safety: if response is empty after filtering, show error
+                if (!aiResponse || aiResponse.length < 10) {
+                    aiResponse = translations[currentLang].errorApi + ': Response was filtered completely. Please try again.';
+                }
+                
+                // Add AI response to chat
+                addMessageToChat('assistant', aiResponse);
+                
+                // Re-render messages
+                renderMessages(getActiveChat().messages);
+                
+                // Update chat list (title might have changed)
+                renderChatList();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                // Add error message
+                addMessageToChat('assistant', `❌ ${translations[currentLang].errorTitle || 'Error'}: ${error.message}`);
+                renderMessages(getActiveChat().messages);
+            } finally {
+                loadingState.classList.add('hidden');
+                askButton.disabled = false;
+            }
+        }
+        
+        // ========== EVENT LISTENERS ==========
+        document.getElementById('question').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                askQuestion();
+            }
+        });
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove('open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>
