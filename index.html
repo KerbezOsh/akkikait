@@ -2,11 +2,12 @@
 <html lang="ky">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="theme-color" content="#1e3a8a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Акыйкат AI — Кыргызстандын мыйзамдары боюнча акысыз юридикалык кеңешчи">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Акыйкат AI — Кыргызстандын санариптик юристи</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,12 +17,39 @@
         * {
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
         
-        html, body {
+        html {
+            height: 100%;
+            height: -webkit-fill-available;
+        }
+        
+        body {
+            min-height: 100%;
+            min-height: 100dvh;
+            min-height: -webkit-fill-available;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Safe area for notched phones */
+        .safe-top {
+            padding-top: env(safe-area-inset-top, 0);
+        }
+        
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+        
+        .safe-left {
+            padding-left: env(safe-area-inset-left, 0);
+        }
+        
+        .safe-right {
+            padding-right: env(safe-area-inset-right, 0);
         }
         
         .gradient-bg {
@@ -36,26 +64,35 @@
             background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
         }
         
-        /* Toggle Switch */
+        /* Toggle Switch - smaller on mobile */
         .toggle-switch {
             position: relative;
-            width: 120px;
-            height: 36px;
+            width: 100px;
+            height: 32px;
             background: rgba(255,255,255,0.15);
-            border-radius: 18px;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        @media (min-width: 640px) {
+            .toggle-switch {
+                width: 120px;
+                height: 36px;
+                border-radius: 18px;
+            }
         }
         
         .toggle-switch::before {
             content: '';
             position: absolute;
-            top: 3px;
-            left: 3px;
-            width: calc(50% - 3px);
-            height: 30px;
+            top: 2px;
+            left: 2px;
+            width: calc(50% - 2px);
+            height: calc(100% - 4px);
             background: white;
-            border-radius: 15px;
+            border-radius: 14px;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
@@ -76,10 +113,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 700;
             transition: color 0.3s;
             z-index: 1;
+        }
+        
+        @media (min-width: 640px) {
+            .toggle-label {
+                font-size: 12px;
+            }
         }
         
         .toggle-switch:not(.ru) .toggle-label:first-child {
@@ -102,6 +145,7 @@
         .sidebar {
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
+            will-change: transform;
         }
         
         .sidebar.open {
@@ -136,13 +180,13 @@
         /* Loading Animation */
         .loader-dots {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
         }
         
         .loader-dots span {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: #3b82f6;
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out;
@@ -169,11 +213,13 @@
         
         /* Response Formatting */
         .response-text {
-            line-height: 1.8;
+            line-height: 1.7;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .response-text p {
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         
         .response-text strong {
@@ -182,28 +228,29 @@
         }
         
         .response-text ul, .response-text ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
+            margin-left: 1.25rem;
+            margin-bottom: 0.75rem;
         }
         
         .response-text li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         
         .response-text code {
             background: #eff6ff;
-            padding: 2px 6px;
+            padding: 2px 4px;
             border-radius: 4px;
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #1e40af;
+            word-break: break-all;
         }
         
         .response-text blockquote {
-            border-left: 4px solid #3b82f6;
-            padding-left: 1rem;
-            margin: 1rem 0;
+            border-left: 3px solid #3b82f6;
+            padding-left: 0.75rem;
+            margin: 0.75rem 0;
             background: #eff6ff;
-            padding: 1rem;
+            padding: 0.75rem;
             border-radius: 0 8px 8px 0;
         }
         
@@ -212,6 +259,7 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            -ms-overflow-style: none;
         }
         
         .quick-scroll::-webkit-scrollbar {
@@ -221,6 +269,8 @@
         /* Touch feedback */
         .touch-btn {
             transition: transform 0.1s, opacity 0.1s;
+            -webkit-user-select: none;
+            user-select: none;
         }
         
         .touch-btn:active {
@@ -239,6 +289,10 @@
         }
         
         /* Sidebar scroll */
+        .sidebar-scroll {
+            -webkit-overflow-scrolling: touch;
+        }
+        
         .sidebar-scroll::-webkit-scrollbar {
             width: 4px;
         }
@@ -257,247 +311,292 @@
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border: 1px solid #e2e8f0;
         }
+        
+        /* Main container - full height */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100dvh;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+        
+        /* Chat messages container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Input area - fixed at bottom on mobile */
+        .input-area {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+        }
+        
+        /* Fix for iOS keyboard */
+        @supports (-webkit-touch-callout: none) {
+            .input-area {
+                padding-bottom: env(safe-area-inset-bottom, 0);
+            }
+        }
+        
+        /* Overlay */
+        .sidebar-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar fixed lg:relative inset-y-0 left-0 w-72 bg-white border-r border-gray-200 z-40 flex flex-col">
-        <div class="p-4 border-b border-gray-100">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                        </svg>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen min-h-dvh">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar fixed lg:relative inset-y-0 left-0 w-72 max-w-[85vw] bg-white border-r border-gray-200 z-40 flex flex-col safe-top safe-bottom">
+            <div class="p-3 sm:p-4 border-b border-gray-100">
+                <div class="flex items-center justify-between mb-3 sm:mb-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 gradient-bg rounded-lg flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                            </svg>
+                        </div>
+                        <span class="font-bold text-gray-800 text-sm sm:text-base" data-i18n="chatHistory">Чаттар тарыхы</span>
                     </div>
-                    <span class="font-bold text-gray-800" data-i18n="chatHistory">Чаттар тарыхы</span>
+                    <button onclick="toggleSidebar()" class="p-2 hover:bg-gray-100 rounded-lg touch-btn">
+                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </div>
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg touch-btn">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                
+                <button onclick="startNewChat()" class="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 gradient-btn text-white rounded-xl font-semibold touch-btn hover:shadow-lg transition-all text-sm sm:text-base">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
+                    <span data-i18n="newChat">Жаңы чат</span>
                 </button>
             </div>
             
-            <button onclick="startNewChat()" class="w-full flex items-center gap-3 px-4 py-3 gradient-btn text-white rounded-xl font-semibold touch-btn hover:shadow-lg transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                <span data-i18n="newChat">Жаңы чат</span>
-            </button>
-        </div>
+            <div id="chatList" class="flex-1 overflow-y-auto sidebar-scroll p-2 sm:p-3 space-y-1"></div>
+            
+            <div class="p-3 sm:p-4 border-t border-gray-100">
+                <button onclick="clearAllChats()" class="w-full flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-red-600 hover:bg-red-50 rounded-xl text-xs sm:text-sm font-medium transition-colors touch-btn">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    <span data-i18n="clearAll">Баарын өчүрүү</span>
+                </button>
+            </div>
+        </aside>
         
-        <div id="chatList" class="flex-1 overflow-y-auto sidebar-scroll p-3 space-y-1"></div>
-        
-        <div class="p-4 border-t border-gray-100">
-            <button onclick="clearAllChats()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-xl text-sm font-medium transition-colors touch-btn">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                </svg>
-                <span data-i18n="clearAll">Баарын өчүрүү</span>
-            </button>
-        </div>
-    </aside>
-    
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+        <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 bg-black/50 z-30 lg:hidden" onclick="toggleSidebar()"></div>
 
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col min-h-screen">
-        <!-- Header -->
-        <header class="gradient-bg text-white py-3 px-4 shadow-xl sticky top-0 z-20">
-            <div class="max-w-5xl mx-auto">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <button onclick="toggleSidebar()" class="p-2 hover:bg-white/10 rounded-xl transition-colors touch-btn">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                            </svg>
-                        </button>
-                        
-                        <div class="flex items-center gap-2 sm:gap-3">
-                            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col min-h-screen min-h-dvh main-container">
+            <!-- Header -->
+            <header class="gradient-bg text-white py-2.5 sm:py-3 px-3 sm:px-4 shadow-xl sticky top-0 z-20 safe-top">
+                <div class="max-w-5xl mx-auto">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5 sm:gap-3">
+                            <button onclick="toggleSidebar()" class="p-1.5 sm:p-2 hover:bg-white/10 rounded-xl transition-colors touch-btn">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                                 </svg>
+                            </button>
+                            
+                            <div class="flex items-center gap-1.5 sm:gap-3">
+                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h1 class="text-sm sm:text-lg font-extrabold tracking-tight">Акыйкат AI</h1>
+                                    <p class="text-blue-200 text-[10px] sm:text-xs font-medium hidden sm:block" data-i18n="tagline">Адилеттик ар бирөө үчүн</p>
+                                </div>
                             </div>
-                            <div class="hidden sm:block">
-                                <h1 class="text-lg font-extrabold tracking-tight">Акыйкат AI</h1>
-                                <p class="text-blue-200 text-xs font-medium" data-i18n="tagline">Адилеттик ар бирөө үчүн</p>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 sm:gap-3">
+                            <button onclick="shareApp()" class="p-1.5 sm:p-2 sm:px-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors touch-btn flex items-center gap-1.5 sm:gap-2">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                </svg>
+                                <span class="hidden sm:inline text-sm font-medium" data-i18n="share">Бөлүшүү</span>
+                            </button>
+                            
+                            <div class="toggle-switch" id="langToggle" onclick="toggleLanguage()">
+                                <div class="toggle-labels">
+                                    <span class="toggle-label">🇰🇬 KG</span>
+                                    <span class="toggle-label">🇷🇺 RU</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </header>
 
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <button onclick="shareApp()" class="p-2 sm:px-3 sm:py-2 bg-white/10 hover:bg-white/20 rounded-xl transition-colors touch-btn flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                            </svg>
-                            <span class="hidden sm:inline text-sm font-medium" data-i18n="share">Бөлүшүү</span>
-                        </button>
+            <!-- Main -->
+            <main class="flex-1 flex flex-col max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-6 w-full chat-container">
+                <!-- Welcome Section -->
+                <div id="welcomeSection" class="flex-1 flex flex-col">
+                    <div class="text-center mb-6 sm:mb-8">
+                        <div class="inline-flex items-center gap-1.5 sm:gap-2 bg-blue-100 text-blue-800 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+                            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full pulse-dot"></span>
+                            <span data-i18n="online">Онлайн жана акысыз</span>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-2 sm:mb-3 leading-tight px-1">
+                            <span data-i18n="title">Кыргыз Республикасынын мыйзамдары боюнча санариптик юристиңиз</span>
+                        </h2>
+                        <p class="text-gray-600 text-xs sm:text-sm md:text-base max-w-2xl mx-auto px-2" data-i18n="subtitle">
+                            Конституция жана КР кодекстеринин негизинде акысыз юридикалык консультация. Кыргызча же орусча суроо бериңиз.
+                        </p>
+                    </div>
+
+                    <!-- Quick Questions -->
+                    <div class="mb-6 sm:mb-8">
+                        <h3 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4 text-center" data-i18n="popularQuestions">
+                            Көп берилүүчү суроолор
+                        </h3>
+                        <div class="quick-scroll -mx-3 sm:-mx-4 px-3 sm:px-4">
+                            <div class="flex gap-2 sm:gap-3 min-w-max pb-2">
+                                <button onclick="setQuestion('Балага сүйүнчү жөлөкпулун кантип алса болот?')" 
+                                        class="touch-btn px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-blue-100 rounded-xl sm:rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                    <div class="flex items-center gap-1.5 sm:gap-2">
+                                        <span class="text-xl sm:text-2xl">👶</span>
+                                        <div class="text-left">
+                                            <p class="font-semibold text-gray-800 text-xs sm:text-sm" data-i18n="q1title">Балага сүйүнчү</p>
+                                            <p class="text-[10px] sm:text-xs text-gray-500" data-i18n="q1desc">Жөлөкпул алуу</p>
+                                        </div>
+                                    </div>
+                                </button>
+                                
+                                <button onclick="setQuestion('Алимент кантип алса болот? Сотко кайрылуу тартиби кандай?')" 
+                                        class="touch-btn px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-blue-100 rounded-xl sm:rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                    <div class="flex items-center gap-1.5 sm:gap-2">
+                                        <span class="text-xl sm:text-2xl">👨‍👩‍👧</span>
+                                        <div class="text-left">
+                                            <p class="font-semibold text-gray-800 text-xs sm:text-sm" data-i18n="q2title">Алимент алуу</p>
+                                            <p class="text-[10px] sm:text-xs text-gray-500" data-i18n="q2desc">Үй-бүлө укугу</p>
+                                        </div>
+                                    </div>
+                                </button>
+                                
+                                <button onclick="setQuestion('Мени иштен мыйзамсыз бошотушту. Менин укуктарым кандай?')" 
+                                        class="touch-btn px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-blue-100 rounded-xl sm:rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                    <div class="flex items-center gap-1.5 sm:gap-2">
+                                        <span class="text-xl sm:text-2xl">⚖️</span>
+                                        <div class="text-left">
+                                            <p class="font-semibold text-gray-800 text-xs sm:text-sm" data-i18n="q3title">Иштен бошотуу</p>
+                                            <p class="text-[10px] sm:text-xs text-gray-500" data-i18n="q3desc">Эмгек укуктары</p>
+                                        </div>
+                                    </div>
+                                </button>
+                                
+                                <button onclick="setQuestion('Жол кыймыл эрежелерин бузгандык үчүн кандай айып пулдар бар?')" 
+                                        class="touch-btn px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-blue-100 rounded-xl sm:rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                    <div class="flex items-center gap-1.5 sm:gap-2">
+                                        <span class="text-xl sm:text-2xl">🚗</span>
+                                        <div class="text-left">
+                                            <p class="font-semibold text-gray-800 text-xs sm:text-sm" data-i18n="q4title">ЖКЭ айыптары</p>
+                                            <p class="text-[10px] sm:text-xs text-gray-500" data-i18n="q4desc">Жол эрежелери</p>
+                                        </div>
+                                    </div>
+                                </button>
+                                
+                                <button onclick="setQuestion('ЖЧК же ИП кантип каттаса болот?')" 
+                                        class="touch-btn px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-blue-100 rounded-xl sm:rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                    <div class="flex items-center gap-1.5 sm:gap-2">
+                                        <span class="text-xl sm:text-2xl">📋</span>
+                                        <div class="text-left">
+                                            <p class="font-semibold text-gray-800 text-xs sm:text-sm" data-i18n="q5title">Бизнес каттоо</p>
+                                            <p class="text-[10px] sm:text-xs text-gray-500" data-i18n="q5desc">ЖЧК / ИП</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="flex-1 space-y-3 sm:space-y-4 mb-4 hidden overflow-y-auto"></div>
+
+                <!-- Loading State -->
+                <div id="loadingState" class="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 p-4 sm:p-6 hidden mb-4">
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        <div class="loader-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <p class="text-gray-700 font-semibold text-sm sm:text-base" data-i18n="analyzing">КР мыйзамдарын талдоодо...</p>
+                            <p class="text-gray-400 text-xs sm:text-sm" data-i18n="wait">Бир аз күтө туруңуз</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-area bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 overflow-hidden mt-auto safe-bottom">
+                    <div class="p-3 sm:p-5">
+                        <textarea 
+                            id="question" 
+                            rows="2" 
+                            class="w-full px-3 sm:px-4 py-3 sm:py-4 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all resize-none text-gray-800 placeholder-gray-400 text-sm sm:text-base"
+                            data-i18n-placeholder="inputPlaceholder"
+                            placeholder="Мисалы: Иш берүүчүм айлыгымды 2 айдан бери бербей жатат. Мен эмне кылсам болот?"
+                        ></textarea>
                         
-                        <div class="toggle-switch" id="langToggle" onclick="toggleLanguage()">
-                            <div class="toggle-labels">
-                                <span class="toggle-label">🇰🇬 KG</span>
-                                <span class="toggle-label">🇷🇺 RU</span>
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-3">
+                            <div class="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-400">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                                <span data-i18n="privacy">Маалыматтарыңыз сакталбайт</span>
                             </div>
+                            <button 
+                                onclick="askQuestion()" 
+                                id="askButton"
+                                class="touch-btn w-full sm:w-auto gradient-btn text-white font-bold rounded-xl sm:rounded-2xl px-6 sm:px-8 py-3 sm:py-4 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
+                            >
+                                <span data-i18n="submitBtn">Жөнөтүү</span>
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </main>
 
-        <!-- Main -->
-        <main class="flex-1 max-w-5xl mx-auto px-4 py-6 sm:py-8 w-full">
-            <!-- Welcome Section -->
-            <div id="welcomeSection">
-                <div class="text-center mb-8 sm:mb-10">
-                    <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-                        <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
-                        <span data-i18n="online">Онлайн жана акысыз</span>
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-200 py-3 sm:py-4 px-3 sm:px-4 mt-auto safe-bottom">
+                <div class="max-w-5xl mx-auto text-center">
+                    <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
+                        <span class="text-lg sm:text-xl">🇰🇬</span>
+                        <p class="text-gray-600 text-xs sm:text-sm font-medium" data-i18n="footerTitle">
+                            Акыйкат AI — Оштук 14 жашар бала иштеп чыккан долбоор
+                        </p>
                     </div>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 sm:mb-4 leading-tight px-2">
-                        <span data-i18n="title">Кыргыз Республикасынын мыйзамдары боюнча санариптик юристиңиз</span>
-                    </h2>
-                    <p class="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4" data-i18n="subtitle">
-                        Конституция жана КР кодекстеринин негизинде акысыз юридикалык консультация. Кыргызча же орусча суроо бериңиз.
+                    <p class="text-gray-400 text-[10px] sm:text-xs" data-i18n="footerDisclaimer">
+                        Маалымат маалымдама мүнөзүндө берилет. Юридикалык маанилүү аракеттер үчүн адвокатка кайрылыңыз.
                     </p>
                 </div>
-
-                <!-- Quick Questions -->
-                <div class="mb-8">
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 text-center" data-i18n="popularQuestions">
-                        Көп берилүүчү суроолор
-                    </h3>
-                    <div class="quick-scroll -mx-4 px-4">
-                        <div class="flex gap-3 min-w-max pb-2">
-                            <button onclick="setQuestion('Балага сүйүнчү жөлөкпулун кантип алса болот?')" 
-                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">👶</span>
-                                    <div class="text-left">
-                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q1title">Балага сүйүнчү</p>
-                                        <p class="text-xs text-gray-500" data-i18n="q1desc">Жөлөкпул алуу</p>
-                                    </div>
-                                </div>
-                            </button>
-                            
-                            <button onclick="setQuestion('Алимент кантип алса болот? Сотко кайрылуу тартиби кандай?')" 
-                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">👨‍👩‍👧</span>
-                                    <div class="text-left">
-                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q2title">Алимент алуу</p>
-                                        <p class="text-xs text-gray-500" data-i18n="q2desc">Үй-бүлө укугу</p>
-                                    </div>
-                                </div>
-                            </button>
-                            
-                            <button onclick="setQuestion('Мени иштен мыйзамсыз бошотушту. Менин укуктарым кандай?')" 
-                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">⚖️</span>
-                                    <div class="text-left">
-                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q3title">Иштен бошотуу</p>
-                                        <p class="text-xs text-gray-500" data-i18n="q3desc">Эмгек укуктары</p>
-                                    </div>
-                                </div>
-                            </button>
-                            
-                            <button onclick="setQuestion('Жол кыймыл эрежелерин бузгандык үчүн кандай айып пулдар бар?')" 
-                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">🚗</span>
-                                    <div class="text-left">
-                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q4title">ЖКЭ айыптары</p>
-                                        <p class="text-xs text-gray-500" data-i18n="q4desc">Жол эрежелери</p>
-                                    </div>
-                                </div>
-                            </button>
-                            
-                            <button onclick="setQuestion('ЖЧК же ИП кантип каттаса болот?')" 
-                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">📋</span>
-                                    <div class="text-left">
-                                        <p class="font-semibold text-gray-800 text-sm" data-i18n="q5title">Бизнес каттоо</p>
-                                        <p class="text-xs text-gray-500" data-i18n="q5desc">ЖЧК / ИП</p>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Messages -->
-            <div id="chatMessages" class="space-y-4 mb-6 hidden"></div>
-
-            <!-- Loading State -->
-            <div id="loadingState" class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 hidden mb-6">
-                <div class="flex items-center gap-4">
-                    <div class="loader-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <p class="text-gray-700 font-semibold" data-i18n="analyzing">КР мыйзамдарын талдоодо...</p>
-                        <p class="text-gray-400 text-sm" data-i18n="wait">Бир аз күтө туруңуз</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Input -->
-            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-                <div class="p-5 sm:p-6">
-                    <textarea 
-                        id="question" 
-                        rows="3" 
-                        class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all resize-none text-gray-800 placeholder-gray-400 text-base"
-                        data-i18n-placeholder="inputPlaceholder"
-                        placeholder="Мисалы: Иш берүүчүм айлыгымды 2 айдан бери бербей жатат. Мен эмне кылсам болот?"
-                    ></textarea>
-                    
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-4">
-                        <div class="flex items-center gap-2 text-xs text-gray-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                            </svg>
-                            <span data-i18n="privacy">Маалыматтарыңыз сакталбайт</span>
-                        </div>
-                        <button 
-                            onclick="askQuestion()" 
-                            id="askButton"
-                            class="touch-btn w-full sm:w-auto gradient-btn text-white font-bold rounded-2xl px-8 py-4 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-                        >
-                            <span data-i18n="submitBtn">Жөнөтүү</span>
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="bg-white border-t border-gray-200 py-4 px-4 mt-auto">
-            <div class="max-w-5xl mx-auto text-center">
-                <div class="flex items-center justify-center gap-2 mb-1">
-                    <span class="text-xl">🇰🇬</span>
-                    <p class="text-gray-600 text-sm font-medium" data-i18n="footerTitle">
-                        Акыйкат AI — Оштук 14 жашар бала иштеп чыккан долбоор
-                    </p>
-                </div>
-                <p class="text-gray-400 text-xs" data-i18n="footerDisclaimer">
-                    Маалымат маалымдама мүнөзүндө берилет. Юридикалык маанилүү аракеттер үчүн адвокатка кайрылыңыз.
-                </p>
-            </div>
-        </footer>
+            </footer>
+        </div>
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-xl z-50 hidden text-sm font-medium flex items-center gap-2">
+    <div id="toast" class="fixed bottom-20 sm:bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl shadow-xl z-50 hidden text-xs sm:text-sm font-medium flex items-center gap-2 safe-bottom">
         <span id="toastIcon"></span>
         <span id="toastText"></span>
     </div>
@@ -647,10 +746,19 @@
             loadChats();
             applyLanguage(currentLang);
             updateToggleState();
-            if (window.innerWidth < 1024) {
-                document.getElementById('sidebar').classList.remove('open');
-            }
+            
+            // Set correct viewport height for mobile
+            setViewportHeight();
+            window.addEventListener('resize', setViewportHeight);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(setViewportHeight, 100);
+            });
         });
+        
+        function setViewportHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
         
         // ===== SHARE =====
         async function shareApp() {
@@ -683,26 +791,33 @@
         
         // ===== CHAT STORAGE =====
         function loadChats() {
-            const stored = localStorage.getItem('akyykat_chats');
-            chats = stored ? JSON.parse(stored) : [];
-            const storedActiveId = localStorage.getItem('akyykat_active_chat');
-            if (storedActiveId && chats.find(c => c.id === storedActiveId)) {
-                activeChatId = storedActiveId;
-                loadChat(activeChatId);
+            try {
+                const stored = localStorage.getItem('akyykat_chats');
+                chats = stored ? JSON.parse(stored) : [];
+                const storedActiveId = localStorage.getItem('akyykat_active_chat');
+                if (storedActiveId && chats.find(c => c.id === storedActiveId)) {
+                    activeChatId = storedActiveId;
+                    loadChat(activeChatId);
+                }
+                renderChatList();
+            } catch (e) {
+                chats = [];
+                renderChatList();
             }
-            renderChatList();
         }
         
         function saveChats() {
-            localStorage.setItem('akyykat_chats', JSON.stringify(chats));
-            if (activeChatId) localStorage.setItem('akyykat_active_chat', activeChatId);
-            else localStorage.removeItem('akyykat_active_chat');
+            try {
+                localStorage.setItem('akyykat_chats', JSON.stringify(chats));
+                if (activeChatId) localStorage.setItem('akyykat_active_chat', activeChatId);
+                else localStorage.removeItem('akyykat_active_chat');
+            } catch (e) {}
         }
         
         function createChat(firstMessage) {
             const chat = {
                 id: Date.now().toString(),
-                title: firstMessage.substring(0, 40) + (firstMessage.length > 40 ? '...' : ''),
+                title: firstMessage.substring(0, 35) + (firstMessage.length > 35 ? '...' : ''),
                 createdAt: new Date().toISOString(),
                 messages: []
             };
@@ -735,12 +850,12 @@
             
             if (chats.length === 0) {
                 chatList.innerHTML = `
-                    <div class="text-center py-8 text-gray-400">
-                        <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="text-center py-6 sm:py-8 text-gray-400">
+                        <svg class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                         </svg>
-                        <p class="text-sm">${t.noChats}</p>
-                        <p class="text-xs mt-1">${t.startFirst}</p>
+                        <p class="text-xs sm:text-sm">${t.noChats}</p>
+                        <p class="text-[10px] sm:text-xs mt-1">${t.startFirst}</p>
                     </div>`;
                 return;
             }
@@ -752,15 +867,15 @@
                 const isActive = chat.id === activeChatId;
                 
                 html += `
-                    <div class="chat-item ${isActive ? 'active' : ''} p-3 rounded-xl cursor-pointer group" onclick="loadChat('${chat.id}')">
+                    <div class="chat-item ${isActive ? 'active' : ''} p-2.5 sm:p-3 rounded-lg sm:rounded-xl cursor-pointer group" onclick="loadChat('${chat.id}')">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex-1 min-w-0">
-                                <p class="font-medium text-gray-800 text-sm truncate">${escapeHtml(chat.title)}</p>
-                                <p class="text-xs text-gray-400 mt-1">${dateLabel}</p>
+                                <p class="font-medium text-gray-800 text-xs sm:text-sm truncate">${escapeHtml(chat.title)}</p>
+                                <p class="text-[10px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">${dateLabel}</p>
                             </div>
                             <button onclick="event.stopPropagation(); deleteChat('${chat.id}')" 
-                                    class="opacity-60 sm:opacity-0 group-hover:opacity-100 p-1.5 hover:bg-red-100 rounded-lg transition-all touch-btn">
-                                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    class="opacity-70 sm:opacity-0 group-hover:opacity-100 p-1 sm:p-1.5 hover:bg-red-100 rounded-lg transition-all touch-btn flex-shrink-0">
+                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
                             </button>
@@ -780,7 +895,7 @@
             document.getElementById('chatMessages').classList.remove('hidden');
             renderMessages(chat.messages);
             renderChatList();
-            if (window.innerWidth < 1024) toggleSidebar();
+            toggleSidebar();
         }
         
         function renderMessages(messages) {
@@ -794,41 +909,43 @@
                 
                 if (msg.role === 'user') {
                     div.innerHTML = `
-                        <div class="flex justify-end mb-4">
-                            <div class="user-message max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-tr-md px-5 py-4 text-white shadow-lg">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="flex justify-end mb-3 sm:mb-4">
+                            <div class="user-message max-w-[88%] sm:max-w-[75%] rounded-2xl rounded-tr-md px-3 sm:px-5 py-3 sm:py-4 text-white shadow-lg">
+                                <div class="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                                    <div class="w-5 h-5 sm:w-6 sm:h-6 bg-white/20 rounded-full flex items-center justify-center">
+                                        <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <span class="text-xs font-semibold opacity-90">${t.you}</span>
+                                    <span class="text-[10px] sm:text-xs font-semibold opacity-90">${t.you}</span>
                                 </div>
-                                <p class="text-sm sm:text-base leading-relaxed">${escapeHtml(msg.content)}</p>
+                                <p class="text-xs sm:text-base leading-relaxed">${escapeHtml(msg.content)}</p>
                             </div>
                         </div>`;
                 } else {
                     const lang = detectLang(msg.content);
                     div.innerHTML = `
-                        <div class="flex justify-start mb-4">
-                            <div class="ai-message max-w-[90%] sm:max-w-[80%] rounded-2xl rounded-tl-md px-5 py-4 shadow-lg">
-                                <div class="flex items-center gap-2 mb-3">
-                                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center shadow-md">
-                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex justify-start mb-3 sm:mb-4">
+                            <div class="ai-message max-w-[92%] sm:max-w-[80%] rounded-2xl rounded-tl-md px-3 sm:px-5 py-3 sm:py-4 shadow-lg">
+                                <div class="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+                                    <div class="w-6 h-6 sm:w-8 sm:h-8 gradient-bg rounded-lg flex items-center justify-center shadow-md">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
                                         </svg>
                                     </div>
-                                    <span class="font-bold text-blue-900 text-sm">Акыйкат AI</span>
-                                    <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full font-medium">${lang}</span>
+                                    <span class="font-bold text-blue-900 text-xs sm:text-sm">Акыйкат AI</span>
+                                    <span class="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full font-medium">${lang}</span>
                                 </div>
-                                <div class="response-text text-gray-700 text-sm sm:text-base">${formatMarkdown(msg.content)}</div>
+                                <div class="response-text text-gray-700 text-xs sm:text-base">${formatMarkdown(msg.content)}</div>
                             </div>
                         </div>`;
                 }
                 container.appendChild(div);
             });
             
-            setTimeout(() => container.scrollTop = container.scrollHeight, 100);
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 100);
         }
         
         function startNewChat() {
@@ -840,7 +957,7 @@
             document.getElementById('question').value = '';
             renderChatList();
             showToast(translations[currentLang].toastNewChat, '✨');
-            if (window.innerWidth < 1024) toggleSidebar();
+            toggleSidebar();
         }
         
         function deleteChat(chatId) {
@@ -874,9 +991,14 @@
             if (window.innerWidth >= 1024) {
                 sidebar.classList.toggle('desktop-closed');
             } else {
-                sidebar.classList.toggle('open');
-                overlay.classList.toggle('hidden');
-                document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+                const isOpen = sidebar.classList.toggle('open');
+                if (isOpen) {
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             }
         }
         
@@ -921,6 +1043,10 @@
         function setQuestion(text) {
             document.getElementById('question').value = text;
             document.getElementById('question').focus();
+            // Scroll to input on mobile
+            setTimeout(() => {
+                document.getElementById('question').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
         }
         
         function detectLang(text) {
@@ -947,16 +1073,16 @@
             if (!text) return '';
             return text
                 .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-100 p-4 rounded-xl overflow-x-auto my-4 text-sm"><code>$1</code></pre>')
+                .replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-100 p-3 sm:p-4 rounded-lg sm:rounded-xl overflow-x-auto my-3 sm:my-4 text-xs sm:text-sm"><code>$1</code></pre>')
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/^### (.*$)/gm, '<h3 class="font-bold text-lg text-blue-900 mt-5 mb-2">$1</h3>')
-                .replace(/^## (.*$)/gm, '<h3 class="font-bold text-xl text-blue-900 mt-6 mb-3">$1</h3>')
-                .replace(/^&gt; (.*$)/gm, '<blockquote class="border-l-4 border-blue-400 pl-4 py-2 my-2 bg-blue-50 rounded-r">$1</blockquote>')
-                .replace(/^\d+\. (.*$)/gm, '<li class="ml-5 mb-2 list-decimal">$1</li>')
-                .replace(/^[-•] (.*$)/gm, '<li class="ml-5 mb-2 list-disc">$1</li>')
-                .replace(/^---$/gm, '<hr class="my-6 border-gray-200">')
+                .replace(/^### (.*$)/gm, '<h3 class="font-bold text-base sm:text-lg text-blue-900 mt-4 sm:mt-5 mb-1.5 sm:mb-2">$1</h3>')
+                .replace(/^## (.*$)/gm, '<h3 class="font-bold text-lg sm:text-xl text-blue-900 mt-5 sm:mt-6 mb-2 sm:mb-3">$1</h3>')
+                .replace(/^&gt; (.*$)/gm, '<blockquote class="border-l-3 sm:border-l-4 border-blue-400 pl-3 sm:pl-4 py-1.5 sm:py-2 my-1.5 sm:my-2 bg-blue-50 rounded-r text-xs sm:text-base">$1</blockquote>')
+                .replace(/^\d+\. (.*$)/gm, '<li class="ml-4 sm:ml-5 mb-1.5 sm:mb-2 list-decimal">$1</li>')
+                .replace(/^[-•] (.*$)/gm, '<li class="ml-4 sm:ml-5 mb-1.5 sm:mb-2 list-disc">$1</li>')
+                .replace(/^---$/gm, '<hr class="my-4 sm:my-6 border-gray-200">')
                 .replace(/\n/g, '<br>');
         }
         
@@ -985,7 +1111,11 @@
             loadingState.classList.remove('hidden');
             askButton.disabled = true;
             questionInput.value = '';
-            loadingState.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            
+            // Scroll to loading on mobile
+            setTimeout(() => {
+                loadingState.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
             
             try {
                 const chat = getActiveChat();
@@ -1012,15 +1142,8 @@
                 
                 const data = await response.json();
                 
-                // Обработка ошибок
-                if (response.status === 429) {
-                    throw new Error('OVERLOADED');
-                }
-                
-                if (response.status === 401) {
-                    throw new Error('UNAUTHORIZED');
-                }
-                
+                if (response.status === 429) throw new Error('OVERLOADED');
+                if (response.status === 401) throw new Error('UNAUTHORIZED');
                 if (!response.ok) throw new Error(data.error?.message || 'API Error');
                 
                 let aiResponse = data.choices[0]?.message?.content;
@@ -1061,13 +1184,23 @@
             }
         });
         
+        // Handle resize for sidebar
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 1024) {
                 document.getElementById('sidebar').classList.remove('open');
-                document.getElementById('sidebarOverlay').classList.add('hidden');
+                document.getElementById('sidebarOverlay').classList.remove('active');
                 document.body.style.overflow = '';
             }
         });
+        
+        // Prevent iOS bounce scroll
+        document.body.addEventListener('touchmove', function(e) {
+            if (document.getElementById('sidebar').classList.contains('open')) {
+                if (!e.target.closest('.sidebar-scroll')) {
+                    e.preventDefault();
+                }
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
