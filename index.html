@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#1e3a8a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Акыйкат AI — Кыргызстандын мыйзамдары боюнча акысыз юридикалык кеңешчи">
     <title>Акыйкат AI — Кыргызстандын санариптик юристи</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +39,7 @@
         /* Toggle Switch */
         .toggle-switch {
             position: relative;
-            width: 140px;
+            width: 120px;
             height: 36px;
             background: rgba(255,255,255,0.15);
             border-radius: 18px;
@@ -76,7 +77,7 @@
             align-items: center;
             justify-content: center;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             transition: color 0.3s;
             z-index: 1;
         }
@@ -100,7 +101,7 @@
         /* Sidebar */
         .sidebar {
             transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease-in-out;
         }
         
         .sidebar.open {
@@ -133,18 +134,6 @@
         }
         
         /* Loading Animation */
-        .skeleton {
-            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
         .loader-dots {
             display: flex;
             gap: 8px;
@@ -152,8 +141,8 @@
         }
         
         .loader-dots span {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: #3b82f6;
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out;
@@ -170,17 +159,17 @@
         
         /* Fade In */
         .fade-in {
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         /* Response Formatting */
         .response-text {
-            line-height: 1.9;
+            line-height: 1.8;
         }
         
         .response-text p {
@@ -201,12 +190,6 @@
             margin-bottom: 0.5rem;
         }
         
-        .response-text h3, .response-text h4 {
-            color: #1e3a8a;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        
         .response-text code {
             background: #eff6ff;
             padding: 2px 6px;
@@ -224,22 +207,11 @@
             border-radius: 0 8px 8px 0;
         }
         
-        /* Mobile Menu */
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        
         /* Quick buttons scroll */
         .quick-scroll {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
-            -ms-overflow-style: none;
         }
         
         .quick-scroll::-webkit-scrollbar {
@@ -256,7 +228,7 @@
             opacity: 0.9;
         }
         
-        /* Pulse animation for status */
+        /* Pulse animation */
         .pulse-dot {
             animation: pulse 2s infinite;
         }
@@ -266,18 +238,9 @@
             50% { opacity: 0.5; }
         }
         
-        /* Scrollbar for sidebar */
-        .sidebar-scroll {
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
-        }
-        
+        /* Sidebar scroll */
         .sidebar-scroll::-webkit-scrollbar {
             width: 4px;
-        }
-        
-        .sidebar-scroll::-webkit-scrollbar-track {
-            background: transparent;
         }
         
         .sidebar-scroll::-webkit-scrollbar-thumb {
@@ -291,15 +254,14 @@
         }
         
         .ai-message {
-            background: white;
-            border: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
         }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex">
-    <!-- Sidebar - Chat History -->
+    <!-- Sidebar -->
     <aside id="sidebar" class="sidebar fixed lg:relative inset-y-0 left-0 w-72 bg-white border-r border-gray-200 z-40 flex flex-col">
-        <!-- Sidebar Header -->
         <div class="p-4 border-b border-gray-100">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-2">
@@ -317,7 +279,6 @@
                 </button>
             </div>
             
-            <!-- New Chat Button -->
             <button onclick="startNewChat()" class="w-full flex items-center gap-3 px-4 py-3 gradient-btn text-white rounded-xl font-semibold touch-btn hover:shadow-lg transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -326,12 +287,8 @@
             </button>
         </div>
         
-        <!-- Chat List -->
-        <div id="chatList" class="flex-1 overflow-y-auto sidebar-scroll p-3 space-y-1">
-            <!-- Chats will be populated dynamically -->
-        </div>
+        <div id="chatList" class="flex-1 overflow-y-auto sidebar-scroll p-3 space-y-1"></div>
         
-        <!-- Sidebar Footer -->
         <div class="p-4 border-t border-gray-100">
             <button onclick="clearAllChats()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-xl text-sm font-medium transition-colors touch-btn">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -342,45 +299,46 @@
         </div>
     </aside>
     
-    <!-- Sidebar Overlay (Mobile) -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <div class="flex-1 flex flex-col min-h-screen">
         <!-- Header -->
-        <header class="gradient-bg text-white py-4 px-4 shadow-xl sticky top-0 z-20">
+        <header class="gradient-bg text-white py-3 px-4 shadow-xl sticky top-0 z-20">
             <div class="max-w-5xl mx-auto">
                 <div class="flex items-center justify-between">
-                    <!-- Left: Hamburger + Logo -->
-                    <div class="flex items-center gap-3">
-                        <!-- Sidebar Toggle (Hamburger) -->
-                        <button onclick="toggleSidebar()" class="p-2 hover:bg-white/10 rounded-xl transition-colors touch-btn" title="Toggle Sidebar">
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        <button onclick="toggleSidebar()" class="p-2 hover:bg-white/10 rounded-xl transition-colors touch-btn">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                             </svg>
                         </button>
                         
-                        <!-- Logo -->
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 sm:w-11 sm:h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
                                 </svg>
                             </div>
                             <div class="hidden sm:block">
-                                <h1 class="text-lg sm:text-xl font-extrabold tracking-tight">Акыйкат AI</h1>
-                                <p class="text-blue-200 text-xs sm:text-sm font-medium" data-i18n="tagline">Адилеттик ар бирөө үчүн</p>
+                                <h1 class="text-lg font-extrabold tracking-tight">Акыйкат AI</h1>
+                                <p class="text-blue-200 text-xs font-medium" data-i18n="tagline">Адилеттик ар бирөө үчүн</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right: Controls -->
-                    <div class="flex items-center gap-2 sm:gap-4">
-                        <!-- Language Toggle -->
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        <button onclick="shareApp()" class="p-2 sm:px-3 sm:py-2 bg-white/10 hover:bg-white/20 rounded-xl transition-colors touch-btn flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                            <span class="hidden sm:inline text-sm font-medium" data-i18n="share">Бөлүшүү</span>
+                        </button>
+                        
                         <div class="toggle-switch" id="langToggle" onclick="toggleLanguage()">
                             <div class="toggle-labels">
-                                <span class="toggle-label">KG</span>
-                                <span class="toggle-label">RU</span>
+                                <span class="toggle-label">🇰🇬 KG</span>
+                                <span class="toggle-label">🇷🇺 RU</span>
                             </div>
                         </div>
                     </div>
@@ -388,9 +346,9 @@
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 max-w-5xl mx-auto px-4 py-6 sm:py-10 w-full">
-            <!-- Welcome Section (shown when no active chat) -->
+        <!-- Main -->
+        <main class="flex-1 max-w-5xl mx-auto px-4 py-6 sm:py-8 w-full">
+            <!-- Welcome Section -->
             <div id="welcomeSection">
                 <div class="text-center mb-8 sm:mb-10">
                     <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
@@ -412,8 +370,8 @@
                     </h3>
                     <div class="quick-scroll -mx-4 px-4">
                         <div class="flex gap-3 min-w-max pb-2">
-                            <button onclick="setQuestion('Балага сүйүнчү жөлөкпулун кантип алса болот? Кандай документтер керек?')" 
-                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                            <button onclick="setQuestion('Балага сүйүнчү жөлөкпулун кантип алса болот?')" 
+                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
                                 <div class="flex items-center gap-2">
                                     <span class="text-2xl">👶</span>
                                     <div class="text-left">
@@ -424,7 +382,7 @@
                             </button>
                             
                             <button onclick="setQuestion('Алимент кантип алса болот? Сотко кайрылуу тартиби кандай?')" 
-                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
                                 <div class="flex items-center gap-2">
                                     <span class="text-2xl">👨‍👩‍👧</span>
                                     <div class="text-left">
@@ -434,8 +392,8 @@
                                 </div>
                             </button>
                             
-                            <button onclick="setQuestion('Мени иштен мыйзамсыз бошотушту. Менин укуктарым кандай? Кайда кайрылсам болот?')" 
-                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                            <button onclick="setQuestion('Мени иштен мыйзамсыз бошотушту. Менин укуктарым кандай?')" 
+                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
                                 <div class="flex items-center gap-2">
                                     <span class="text-2xl">⚖️</span>
                                     <div class="text-left">
@@ -446,7 +404,7 @@
                             </button>
                             
                             <button onclick="setQuestion('Жол кыймыл эрежелерин бузгандык үчүн кандай айып пулдар бар?')" 
-                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
                                 <div class="flex items-center gap-2">
                                     <span class="text-2xl">🚗</span>
                                     <div class="text-left">
@@ -456,8 +414,8 @@
                                 </div>
                             </button>
                             
-                            <button onclick="setQuestion('ЖЧК же ИП кантип каттаса болот? Кандай кадамдар керек?')" 
-                                    class="touch-btn group px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
+                            <button onclick="setQuestion('ЖЧК же ИП кантип каттаса болот?')" 
+                                    class="touch-btn px-4 py-3 bg-white border-2 border-blue-100 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all">
                                 <div class="flex items-center gap-2">
                                     <span class="text-2xl">📋</span>
                                     <div class="text-left">
@@ -471,14 +429,12 @@
                 </div>
             </div>
 
-            <!-- Chat Messages Area -->
-            <div id="chatMessages" class="space-y-4 mb-6 hidden">
-                <!-- Messages will be populated here -->
-            </div>
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="space-y-4 mb-6 hidden"></div>
 
             <!-- Loading State -->
-            <div id="loadingState" class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8 hidden mb-6">
-                <div class="flex items-center gap-4 mb-6">
+            <div id="loadingState" class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 hidden mb-6">
+                <div class="flex items-center gap-4">
                     <div class="loader-dots">
                         <span></span>
                         <span></span>
@@ -489,15 +445,9 @@
                         <p class="text-gray-400 text-sm" data-i18n="wait">Бир аз күтө туруңуз</p>
                     </div>
                 </div>
-                <div class="space-y-3">
-                    <div class="skeleton h-4 w-full"></div>
-                    <div class="skeleton h-4 w-11/12"></div>
-                    <div class="skeleton h-4 w-4/5"></div>
-                    <div class="skeleton h-4 w-9/12"></div>
-                </div>
             </div>
 
-            <!-- Question Input -->
+            <!-- Input -->
             <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                 <div class="p-5 sm:p-6">
                     <textarea 
@@ -518,7 +468,7 @@
                         <button 
                             onclick="askQuestion()" 
                             id="askButton"
-                            class="touch-btn w-full sm:w-auto gradient-btn text-white font-bold rounded-2xl px-8 py-4 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                            class="touch-btn w-full sm:w-auto gradient-btn text-white font-bold rounded-2xl px-8 py-4 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                         >
                             <span data-i18n="submitBtn">Жөнөтүү</span>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -536,7 +486,7 @@
                 <div class="flex items-center justify-center gap-2 mb-1">
                     <span class="text-xl">🇰🇬</span>
                     <p class="text-gray-600 text-sm font-medium" data-i18n="footerTitle">
-                        Акыйкат AI — Кыргызстандын жарандары үчүн долбоор
+                        Акыйкат AI — Оштук 14 жашар бала иштеп чыккан долбоор
                     </p>
                 </div>
                 <p class="text-gray-400 text-xs" data-i18n="footerDisclaimer">
@@ -547,21 +497,28 @@
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-xl z-50 hidden text-sm font-medium">
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-xl z-50 hidden text-sm font-medium flex items-center gap-2">
+        <span id="toastIcon"></span>
         <span id="toastText"></span>
     </div>
 
     <script>
-        // ========== CONFIG ==========
-        const DEFAULT_API_KEY = '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';
-        const MODEL = 'tngtech/deepseek-r1t-chimera:free';
-        const CHATS_STORAGE_KEY = 'akyykat_chats';
-        const ACTIVE_CHAT_KEY = 'akyykat_active_chat';
+        // ===== CONFIG =====
+        const API_KEY = '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';
+        const MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
+        const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
         
-        // ========== i18n TRANSLATIONS ==========
+        // Share texts
+        const SHARE_TEXT = {
+            ky: "⚖️ Акыйкат AI — Кыргызстандын мыйзамдары боюнча акысыз юридикалык кеңешчи. Оштук 14 жашар бала иштеп чыккан долбоор! Өз укугуңду акысыз бил:",
+            ru: "⚖️ Акыйкат AI — бесплатный юридический консультант по законам Кыргызстана. Проект создан 14-летним школьником из Оша! Узнай свои права бесплатно:"
+        };
+        
+        // ===== TRANSLATIONS =====
         const translations = {
             ky: {
                 tagline: "Адилеттик ар бирөө үчүн",
+                share: "Бөлүшүү",
                 chatHistory: "Чаттар тарыхы",
                 newChat: "Жаңы чат",
                 noChats: "Чаттар жок",
@@ -571,46 +528,36 @@
                 title: "Кыргыз Республикасынын мыйзамдары боюнча санариптик юристиңиз",
                 subtitle: "Конституция жана КР кодекстеринин негизинде акысыз юридикалык консультация. Кыргызча же орусча суроо бериңиз.",
                 popularQuestions: "Көп берилүүчү суроолор",
-                q1title: "Балага сүйүнчү",
-                q1desc: "Жөлөкпул алуу",
-                q2title: "Алимент алуу",
-                q2desc: "Үй-бүлө укугу",
-                q3title: "Иштен бошотуу",
-                q3desc: "Эмгек укуктары",
-                q4title: "ЖКЭ айыптары",
-                q4desc: "Жол эрежелери",
-                q5title: "Бизнес каттоо",
-                q5desc: "ЖЧК / ИП",
+                q1title: "Балага сүйүнчү", q1desc: "Жөлөкпул алуу",
+                q2title: "Алимент алуу", q2desc: "Үй-бүлө укугу",
+                q3title: "Иштен бошотуу", q3desc: "Эмгек укуктары",
+                q4title: "ЖКЭ айыптары", q4desc: "Жол эрежелери",
+                q5title: "Бизнес каттоо", q5desc: "ЖЧК / ИП",
                 inputPlaceholder: "Мисалы: Иш берүүчүм айлыгымды 2 айдан бери бербей жатат. Мен эмне кылсам болот?",
                 privacy: "Маалыматтарыңыз сакталбайт",
                 submitBtn: "Жөнөтүү",
                 analyzing: "КР мыйзамдарын талдоодо...",
                 wait: "Бир аз күтө туруңуз",
-                footerTitle: "Акыйкат AI — Кыргызстандын жарандары үчүн долбоор",
+                footerTitle: "Акыйкат AI — Оштук 14 жашар бала иштеп чыккан долбоор",
                 footerDisclaimer: "Маалымат маалымдама мүнөзүндө берилет. Юридикалык маанилүү аракеттер үчүн адвокатка кайрылыңыз.",
-                apiModalTitle: "API жөндөөлөрү",
-                apiModalDesc: "API ачкычы демейки боюнча орнотулган. Өзүңүздүн OpenRouter.ai ачкычыңызды колдонсоңуз болот.",
-                defaultBtn: "Демейки",
-                saveBtn: "Сактоо",
-                apiSecurityNote: "🔒 Ачкыч сиздин браузериңизде гана сакталат",
-                toastCopied: "Көчүрүлдү",
                 toastCleared: "Чаттар өчүрүлдү",
-
                 toastEmpty: "Суроону жазыңыз",
                 toastNewChat: "Жаңы чат башталды",
-                langKy: "🇰🇬 Кыргызча",
-                langRu: "🇷🇺 Орусча",
+                toastCopied: "Шилтеме көчүрүлдү!",
+                toastShared: "Рахмат бөлүшкөнүңүз үчүн!",
                 you: "Сиз",
                 deleteChat: "Чатты өчүрүү",
                 today: "Бүгүн",
                 yesterday: "Кечээ",
                 confirmClearAll: "Бардык чаттарды өчүрүү?",
-                errorTitle: "Ката",
                 errorNetwork: "Тармак катасы. Интернетти текшериңиз.",
-                errorApi: "API катасы"
+                errorOverloaded: "⚠️ Сервер азыр өтө бош эмес (көп суроо). 1 мүнөттөн кийин кайра аракет кылыңыз.",
+                langKy: "🇰🇬 Кыргызча",
+                langRu: "🇷🇺 Орусча"
             },
             ru: {
                 tagline: "Справедливость для каждого",
+                share: "Поделиться",
                 chatHistory: "История чатов",
                 newChat: "Новый чат",
                 noChats: "Нет чатов",
@@ -618,140 +565,130 @@
                 clearAll: "Удалить все",
                 online: "Онлайн и бесплатно",
                 title: "Ваш цифровой юрист по законам Кыргызской Республики",
-                subtitle: "Бесплатная юридическая консультация на основе Конституции и кодексов КР. Задайте вопрос на кыргызском или русском языке.",
+                subtitle: "Бесплатная юридическая консультация на основе Конституции и кодексов КР. Задайте вопрос на кыргызском или русском.",
                 popularQuestions: "Популярные вопросы",
-                q1title: "Балага сүйүнчү",
-                q1desc: "Получение пособия",
-                q2title: "Алименты",
-                q2desc: "Семейное право",
-                q3title: "Увольнение",
-                q3desc: "Трудовые права",
-                q4title: "Штрафы ПДД",
-                q4desc: "Правила дорожного движения",
-                q5title: "Регистрация бизнеса",
-                q5desc: "ООО / ИП",
+                q1title: "Балага сүйүнчү", q1desc: "Получение пособия",
+                q2title: "Алименты", q2desc: "Семейное право",
+                q3title: "Увольнение", q3desc: "Трудовые права",
+                q4title: "Штрафы ПДД", q4desc: "Правила дорожного движения",
+                q5title: "Регистрация бизнеса", q5desc: "ООО / ИП",
                 inputPlaceholder: "Например: Работодатель не платит зарплату уже 2 месяца. Что мне делать?",
                 privacy: "Ваши данные не сохраняются",
                 submitBtn: "Отправить",
                 analyzing: "Анализирую законы КР...",
                 wait: "Подождите немного",
-                footerTitle: "Акыйкат AI — проект для граждан Кыргызстана",
+                footerTitle: "Акыйкат AI — проект 14-летнего школьника из Оша",
                 footerDisclaimer: "Информация носит справочный характер. Для юридически значимых действий обратитесь к адвокату.",
-                apiModalTitle: "Настройки API",
-                apiModalDesc: "API-ключ уже настроен по умолчанию. Вы можете использовать свой ключ от OpenRouter.ai.",
-                defaultBtn: "По умолчанию",
-                saveBtn: "Сохранить",
-                apiSecurityNote: "🔒 Ключ хранится только в вашем браузере",
-                toastCopied: "Скопировано",
                 toastCleared: "Чаты удалены",
-
                 toastEmpty: "Введите вопрос",
                 toastNewChat: "Новый чат создан",
-                langKy: "🇰🇬 Кыргызча",
-                langRu: "🇷🇺 Русский",
+                toastCopied: "Ссылка скопирована!",
+                toastShared: "Спасибо, что поделились!",
                 you: "Вы",
                 deleteChat: "Удалить чат",
                 today: "Сегодня",
                 yesterday: "Вчера",
                 confirmClearAll: "Удалить все чаты?",
-                errorTitle: "Ошибка",
                 errorNetwork: "Ошибка сети. Проверьте интернет.",
-                errorApi: "Ошибка API"
+                errorOverloaded: "⚠️ Сервер сейчас перегружен (слишком много запросов). Попробуйте через 1 минуту.",
+                langKy: "🇰🇬 Кыргызча",
+                langRu: "🇷🇺 Русский"
             }
         };
         
-        // ========== SYSTEM PROMPT ==========
+        // ===== SYSTEM PROMPT =====
         const SYSTEM_PROMPT = `Сен — Акыйкат AI, Кыргыз Республикасынын укук боюнча эксперти.
-Ты — Акыйкат AI, эксперт по праву Кыргызской Республики.
 
-📚 БИЛИМ БАЗАСЫ / БАЗА ЗНАНИЙ:
-- Кыргыз Республикасынын Конституциясы / Конституция КР
-- Жарандык кодекси / Гражданский кодекс КР
-- Эмгек кодекси / Трудовой кодекс КР  
-- Үй-бүлө кодекси / Семейный кодекс КР
-- Жазык кодекси / Уголовный кодекс КР
-- Укук бузуулар жөнүндө кодекс / Кодекс о правонарушениях КР
-- Салык кодекси / Налоговый кодекс КР
-- Административдик мыйзамдар / Административные законы
+🚨 МААНИЛҮҮ ЭРЕЖЕЛЕР:
 
-⚠️ КАТУУ ФИЛЬТР / СТРОГИЙ ФИЛЬТР:
-Эгерде суроо Кыргызстандын мыйзамдарына ТИЕШЕСИ ЖОКСА (мисалы: тамак жасоо, башка өлкөлөрдүн мыйзамдары, программалоо, ойун-зоок ж.б.), анда МИЛДЕТТҮҮ түрдө баш тарт:
+1. ТИЛ ТАЗАЛЫГЫ:
+   - Кыргызча суроо болсо → ТАЗА кыргыз тилинде жооп бер, БИР ДАГЫ орусча сөз кошпо!
+   - Орусча суроо болсо → Только на русском языке.
+   - Орусча ойлонбо, которбо — дароо суралган тилде жаз!
 
-Кыргызча жооп: "Кечириңиз, мен бир гана Кыргыз Республикасынын мыйзамдары боюнча жардам берем. Юридикалык суроо берсеңиз, кубаныч менен жардам берем!"
-
-Русский ответ: "Извините, я помогаю только по законам Кыргызской Республики. Если у вас есть юридический вопрос — с радостью помогу!"
-
-📌 ЖООП БЕРҮҮ ЭРЕЖЕЛЕРИ / ПРАВИЛА ОТВЕТОВ:
-
-1. ТИЛДИ АНЫКТА / ОПРЕДЕЛИ ЯЗЫК:
-   - Суроо кыргызча болсо → кыргызча жооп бер
-   - Вопрос на русском → отвечай на русском
-
-2. КЫРГЫЗЧА ЖООП БЕРҮҮДӨ:
-   - Юридикалык терминдерди колдон: ченемдик укуктук актылар, токтом, берене, укук субъектиси
-   - Кодекстерге шилтеме бер: "КР Эмгек кодексинин 150-беренесине ылайык..."
+2. ЖООП ФОРМАТЫ:
+   - Жоопту ДАРОО маңызы боюнча башта
+   - "Хорошо", "Давайте", "Сейчас помогу" — КОЛДОНБО!
+   - Конкреттүү беренелерге шилтеме бер
    - Кадам-кадам план бер
 
-3. ПРИ ОТВЕТЕ НА РУССКОМ:
-   - Используй юридическую терминологию: нормативно-правовые акты, постановление, статья
-   - Ссылайся на кодексы: "Согласно ст. 150 Трудового кодекса КР..."
-   - Давай пошаговый план действий
+3. БИЛИМ БАЗАСЫ:
+   - Кыргыз Республикасынын Конституциясы
+   - Жарандык кодекси / Гражданский кодекс КР
+   - Эмгек кодекси / Трудовой кодекс КР
+   - Үй-бүлө кодекси / Семейный кодекс КР
+   - Жазык кодекси / Уголовный кодекс КР
+   - Укук бузуулар жөнүндө кодекс
 
-4. ФОРМАТ ЖООП / ФОРМАТ ОТВЕТА:
-   - Кыскача жана так бол / Будь кратким и точным
-   - Конкреттүү беренелерге шилтеме бер / Ссылайся на конкретные статьи
-   - Практикалык кеңеш бер / Давай практические советы
+4. ФИЛЬТР:
+   Эгерде суроо КР мыйзамдарына тиешеси жокса:
+   - Кыргызча: "Кечириңиз, мен бир гана Кыргыз Республикасынын мыйзамдары боюнча жардам берем."
+   - Русский: "Извините, я помогаю только по законам Кыргызской Республики."
 
-5. ⚠️ ДИСКЛЕЙМЕР (ар бир жооптун аягында / в конце КАЖДОГО ответа):
+5. ДИСКЛЕЙМЕР (ар бир жооптун аягында):
+   - Кыргызча: "📋 Бул маалымат таанышуу үчүн берилди. Юридикалык аракеттер үчүн адвокатка кайрылыңыз."
+   - Русский: "📋 Данная информация предоставлена в ознакомительных целях. Для юридических действий обратитесь к адвокату."`;
 
-Кыргызча: "---\\n📋 **Маанилүү:** Бул маалымат таанышуу үчүн гана берилди. Юридикалык маанилүү аракеттер үчүн адвокатка кайрылууну сунуштайбыз."
-
-Русский: "---\\n📋 **Важно:** Данная информация предоставлена в ознакомительных целях. Для юридически значимых действий рекомендуем обратиться к адвокату."`;
-
-        // ========== STATE ==========
+        // ===== STATE =====
         let currentLang = localStorage.getItem('akyykat_lang') || 'ky';
         let chats = [];
         let activeChatId = null;
-        let sidebarOpen = window.innerWidth >= 1024;
         
-        // ========== INITIALIZATION ==========
+        // ===== INIT =====
         document.addEventListener('DOMContentLoaded', () => {
-            // Load chats from localStorage
             loadChats();
-            
-            // Apply saved language
             applyLanguage(currentLang);
-            
-            // Update toggle state
             updateToggleState();
-            
-            // Initialize sidebar state
             if (window.innerWidth < 1024) {
                 document.getElementById('sidebar').classList.remove('open');
             }
         });
         
-        // ========== CHAT STORAGE FUNCTIONS ==========
-        function loadChats() {
-            const stored = localStorage.getItem(CHATS_STORAGE_KEY);
-            chats = stored ? JSON.parse(stored) : [];
+        // ===== SHARE =====
+        async function shareApp() {
+            const url = window.location.href;
+            const text = `${SHARE_TEXT[currentLang]} ${url}`;
             
-            const storedActiveId = localStorage.getItem(ACTIVE_CHAT_KEY);
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'Акыйкат AI', text: SHARE_TEXT[currentLang], url });
+                    showToast(translations[currentLang].toastShared, '🎉');
+                    return;
+                } catch (e) {}
+            }
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast(translations[currentLang].toastCopied, '📋');
+            } catch (e) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(translations[currentLang].toastCopied, '📋');
+            }
+        }
+        
+        // ===== CHAT STORAGE =====
+        function loadChats() {
+            const stored = localStorage.getItem('akyykat_chats');
+            chats = stored ? JSON.parse(stored) : [];
+            const storedActiveId = localStorage.getItem('akyykat_active_chat');
             if (storedActiveId && chats.find(c => c.id === storedActiveId)) {
                 activeChatId = storedActiveId;
                 loadChat(activeChatId);
             }
-            
             renderChatList();
         }
         
         function saveChats() {
-            localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(chats));
-            if (activeChatId) {
-                localStorage.setItem(ACTIVE_CHAT_KEY, activeChatId);
-            } else {
-                localStorage.removeItem(ACTIVE_CHAT_KEY);
-            }
+            localStorage.setItem('akyykat_chats', JSON.stringify(chats));
+            if (activeChatId) localStorage.setItem('akyykat_active_chat', activeChatId);
+            else localStorage.removeItem('akyykat_active_chat');
         }
         
         function createChat(firstMessage) {
@@ -775,18 +712,14 @@
         function addMessageToChat(role, content) {
             const chat = getActiveChat();
             if (chat) {
-                chat.messages.push({
-                    role,
-                    content,
-                    timestamp: new Date().toISOString()
-                });
+                chat.messages.push({ role, content, timestamp: new Date().toISOString() });
                 saveChats();
             }
         }
         
         function renderChatList() {
             const chatList = document.getElementById('chatList');
-            if (!chatList) return; // Safety check
+            if (!chatList) return;
             
             const t = translations[currentLang];
             const today = new Date().toDateString();
@@ -800,24 +733,14 @@
                         </svg>
                         <p class="text-sm">${t.noChats}</p>
                         <p class="text-xs mt-1">${t.startFirst}</p>
-                    </div>
-                `;
+                    </div>`;
                 return;
             }
             
             let html = '';
-            
             chats.forEach(chat => {
                 const chatDate = new Date(chat.createdAt).toDateString();
-                let dateLabel = '';
-                if (chatDate === today) {
-                    dateLabel = t.today;
-                } else if (chatDate === yesterday) {
-                    dateLabel = t.yesterday;
-                } else {
-                    dateLabel = new Date(chat.createdAt).toLocaleDateString();
-                }
-                
+                let dateLabel = chatDate === today ? t.today : chatDate === yesterday ? t.yesterday : new Date(chat.createdAt).toLocaleDateString();
                 const isActive = chat.id === activeChatId;
                 
                 html += `
@@ -828,135 +751,114 @@
                                 <p class="text-xs text-gray-400 mt-1">${dateLabel}</p>
                             </div>
                             <button onclick="event.stopPropagation(); deleteChat('${chat.id}')" 
-                                    class="opacity-0 group-hover:opacity-100 sm:opacity-0 max-sm:opacity-60 p-1.5 hover:bg-red-100 rounded-lg transition-all touch-btn"
-                                    title="${t.deleteChat}">
+                                    class="opacity-60 sm:opacity-0 group-hover:opacity-100 p-1.5 hover:bg-red-100 rounded-lg transition-all touch-btn">
                                 <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
                             </button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
-            
             chatList.innerHTML = html;
         }
         
         function loadChat(chatId) {
             activeChatId = chatId;
             saveChats();
-            
             const chat = getActiveChat();
             if (!chat) return;
             
-            // Hide welcome, show messages
             document.getElementById('welcomeSection').classList.add('hidden');
             document.getElementById('chatMessages').classList.remove('hidden');
-            
-            // Render messages
             renderMessages(chat.messages);
-            
-            // Update sidebar
             renderChatList();
-            
-            // Close sidebar on mobile
-            if (window.innerWidth < 1024) {
-                toggleSidebar();
-            }
+            if (window.innerWidth < 1024) toggleSidebar();
         }
         
         function renderMessages(messages) {
             const container = document.getElementById('chatMessages');
-            if (!container) return;
-            
+            container.innerHTML = '';
             const t = translations[currentLang];
             
-            let html = '';
-            
             messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'fade-in';
+                
                 if (msg.role === 'user') {
-                    html += `
-                        <div class="flex justify-end fade-in">
+                    div.innerHTML = `
+                        <div class="flex justify-end mb-4">
                             <div class="user-message max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-tr-md px-5 py-4 text-white shadow-lg">
-                                <p class="text-xs font-semibold opacity-80 mb-1">${t.you}</p>
-                                <p class="text-sm sm:text-base">${escapeHtml(msg.content)}</p>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-xs font-semibold opacity-90">${t.you}</span>
+                                </div>
+                                <p class="text-sm sm:text-base leading-relaxed">${escapeHtml(msg.content)}</p>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 } else {
-                    // Clean message content from any think tags (in case old data has them)
-                    const cleanContent = filterThinkingTags(msg.content);
-                    const lang = detectResponseLanguage(cleanContent);
-                    html += `
-                        <div class="flex justify-start fade-in">
+                    const lang = detectLang(msg.content);
+                    div.innerHTML = `
+                        <div class="flex justify-start mb-4">
                             <div class="ai-message max-w-[90%] sm:max-w-[80%] rounded-2xl rounded-tl-md px-5 py-4 shadow-lg">
                                 <div class="flex items-center gap-2 mb-3">
-                                    <div class="w-7 h-7 gradient-bg rounded-lg flex items-center justify-center">
+                                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center shadow-md">
                                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
                                         </svg>
                                     </div>
                                     <span class="font-bold text-blue-900 text-sm">Акыйкат AI</span>
-                                    <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">${lang.label}</span>
+                                    <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full font-medium">${lang}</span>
                                 </div>
-                                <div class="response-text text-gray-700 text-sm sm:text-base">${formatMarkdown(cleanContent)}</div>
+                                <div class="response-text text-gray-700 text-sm sm:text-base">${formatMarkdown(msg.content)}</div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }
+                container.appendChild(div);
             });
             
-            container.innerHTML = html;
-            container.scrollTop = container.scrollHeight;
+            setTimeout(() => container.scrollTop = container.scrollHeight, 100);
         }
         
         function startNewChat() {
             activeChatId = null;
             saveChats();
-            
-            // Show welcome, hide messages
             document.getElementById('welcomeSection').classList.remove('hidden');
             document.getElementById('chatMessages').classList.add('hidden');
             document.getElementById('chatMessages').innerHTML = '';
             document.getElementById('question').value = '';
-            
             renderChatList();
-            showToast(translations[currentLang].toastNewChat);
-            
-            // Close sidebar on mobile
-            if (window.innerWidth < 1024) {
-                toggleSidebar();
-            }
+            showToast(translations[currentLang].toastNewChat, '✨');
+            if (window.innerWidth < 1024) toggleSidebar();
         }
         
         function deleteChat(chatId) {
             chats = chats.filter(c => c.id !== chatId);
-            
             if (activeChatId === chatId) {
                 activeChatId = null;
                 document.getElementById('welcomeSection').classList.remove('hidden');
                 document.getElementById('chatMessages').classList.add('hidden');
+                document.getElementById('chatMessages').innerHTML = '';
             }
-            
             saveChats();
             renderChatList();
         }
         
         function clearAllChats() {
             if (!confirm(translations[currentLang].confirmClearAll)) return;
-            
             chats = [];
             activeChatId = null;
             saveChats();
             renderChatList();
-            
             document.getElementById('welcomeSection').classList.remove('hidden');
             document.getElementById('chatMessages').classList.add('hidden');
-            
-            showToast(translations[currentLang].toastCleared);
+            showToast(translations[currentLang].toastCleared, '🗑️');
         }
         
-        // ========== SIDEBAR ==========
+        // ===== SIDEBAR =====
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -970,45 +872,30 @@
             }
         }
         
-        // ========== LANGUAGE FUNCTIONS ==========
+        // ===== LANGUAGE =====
         function applyLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('akyykat_lang', lang);
             document.documentElement.lang = lang;
             
             const t = translations[lang];
-            
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (t[key]) {
-                    el.textContent = t[key];
-                }
+                if (t[key]) el.textContent = t[key];
             });
-            
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
-                if (t[key]) {
-                    el.placeholder = t[key];
-                }
+                if (t[key]) el.placeholder = t[key];
             });
             
-            document.title = lang === 'ky' 
-                ? 'Акыйкат AI — Кыргызстандын санариптик юристи'
-                : 'Акыйкат AI — Цифровой юрист Кыргызстана';
-            
-            // Re-render chat list with new language
+            document.title = lang === 'ky' ? 'Акыйкат AI — Кыргызстандын санариптик юристи' : 'Акыйкат AI — Цифровой юрист Кыргызстана';
             renderChatList();
-            
-            // Re-render messages if any
             const chat = getActiveChat();
-            if (chat) {
-                renderMessages(chat.messages);
-            }
+            if (chat) renderMessages(chat.messages);
         }
         
         function toggleLanguage() {
-            const newLang = currentLang === 'ky' ? 'ru' : 'ky';
-            setLanguage(newLang);
+            setLanguage(currentLang === 'ky' ? 'ru' : 'ky');
         }
         
         function setLanguage(lang) {
@@ -1018,35 +905,28 @@
         
         function updateToggleState() {
             const toggle = document.getElementById('langToggle');
-            if (currentLang === 'ru') {
-                toggle?.classList.add('ru');
-            } else {
-                toggle?.classList.remove('ru');
-            }
+            if (currentLang === 'ru') toggle?.classList.add('ru');
+            else toggle?.classList.remove('ru');
         }
         
-        // ========== UTILITY FUNCTIONS ==========
+        // ===== UTILS =====
         function setQuestion(text) {
             document.getElementById('question').value = text;
             document.getElementById('question').focus();
         }
         
-        function detectResponseLanguage(text) {
-            const kyrgyzChars = /[өүңҮҢӨ]/i;
-            const kyrgyzWords = /\b(менин|сенин|анын|болот|эмес|керек|үчүн|менен|жана|бирок|кодекси|беренеси|ылайык|укук|мыйзам)\b/i;
-            
-            if (kyrgyzChars.test(text) || kyrgyzWords.test(text)) {
-                return { code: 'ky', label: translations[currentLang].langKy };
-            }
-            return { code: 'ru', label: translations[currentLang].langRu };
+        function detectLang(text) {
+            const kyrgyz = /[өүңҮҢӨ]|(\b(менин|болот|эмес|керек|үчүн|менен|жана|кодекси|беренеси|ылайык|укук|мыйзам)\b)/i;
+            return kyrgyz.test(text) ? translations[currentLang].langKy : translations[currentLang].langRu;
         }
         
-        function showToast(message) {
+        function showToast(message, icon = '') {
             const toast = document.getElementById('toast');
-            const toastText = document.getElementById('toastText');
-            toastText.textContent = message;
+            document.getElementById('toastIcon').textContent = icon;
+            document.getElementById('toastText').textContent = message;
             toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 2500);
+            toast.classList.add('flex');
+            setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('flex'); }, 2500);
         }
         
         function escapeHtml(text) {
@@ -1055,88 +935,14 @@
             return div.innerHTML;
         }
         
-        function filterThinkingTags(text) {
-            if (!text) return '';
-            
-            let cleaned = text;
-            
-            // ===== AGGRESSIVE THINK TAG REMOVAL =====
-            
-            // 1. Standard <think>...</think> (greedy - captures everything between)
-            cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, '');
-            
-            // 2. With any whitespace variations
-            cleaned = cleaned.replace(/<\s*think\s*>[\s\S]*?<\s*\/\s*think\s*>/gi, '');
-            
-            // 3. Unclosed <think> - remove from <think> to end of string
-            cleaned = cleaned.replace(/<think>[\s\S]*/gi, '');
-            
-            // 4. Just opening tag anywhere
-            cleaned = cleaned.replace(/<think>/gi, '');
-            
-            // 5. Just closing tag anywhere  
-            cleaned = cleaned.replace(/<\/think>/gi, '');
-            
-            // 6. With attributes like <think reasoning="...">
-            cleaned = cleaned.replace(/<think[^>]*>[\s\S]*?<\/think>/gi, '');
-            
-            // 7. Self-closing think tags
-            cleaned = cleaned.replace(/<think[^>]*\/>/gi, '');
-            
-            // 8. HTML encoded versions
-            cleaned = cleaned.replace(/&lt;think&gt;[\s\S]*?&lt;\/think&gt;/gi, '');
-            cleaned = cleaned.replace(/&lt;think&gt;/gi, '');
-            cleaned = cleaned.replace(/&lt;\/think&gt;/gi, '');
-            
-            // ===== CLEAN UP =====
-            
-            // Remove multiple consecutive newlines (more than 2)
-            cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
-            
-            // Remove leading/trailing whitespace and newlines
-            cleaned = cleaned.trim();
-            
-            // If after all cleaning the text starts with common thinking patterns, remove first paragraph
-            if (cleaned.match(/^(Okay|Хорошо|Давай|Let me|I need to|I should|First,|Сначала|Мне нужно)/i)) {
-                const firstDoubleNewline = cleaned.indexOf('\n\n');
-                if (firstDoubleNewline > 0 && firstDoubleNewline < 200) {
-                    cleaned = cleaned.substring(firstDoubleNewline + 2).trim();
-                }
-            }
-            
-            return cleaned;
-        }
-        
         function formatMarkdown(text) {
             if (!text) return '';
-            
-            // ===== CRITICAL: Filter out ALL thinking tags before rendering =====
-            // Apply main filter
-            text = filterThinkingTags(text);
-            
-            // Additional safety: remove any remaining think patterns
-            text = text.replace(/<think[\s\S]*?<\/think>/gi, '');
-            text = text.replace(/<think>[\s\S]*/gi, '');
-            text = text.replace(/<\/?think[^>]*>/gi, '');
-            
-            // Escape HTML FIRST to prevent XSS, but preserve our formatting
-            let escaped = text
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
-            
-            // Remove escaped think tags
-            escaped = escaped.replace(/&lt;think&gt;[\s\S]*?&lt;\/think&gt;/gi, '');
-            escaped = escaped.replace(/&lt;think&gt;[\s\S]*/gi, '');
-            escaped = escaped.replace(/&lt;\/?think[^&]*&gt;/gi, '');
-            
-            // Now apply markdown formatting
-            return escaped
+            return text
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
                 .replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-100 p-4 rounded-xl overflow-x-auto my-4 text-sm"><code>$1</code></pre>')
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/^#### (.*$)/gm, '<h4 class="font-bold text-base text-blue-900 mt-4 mb-2">$1</h4>')
                 .replace(/^### (.*$)/gm, '<h3 class="font-bold text-lg text-blue-900 mt-5 mb-2">$1</h3>')
                 .replace(/^## (.*$)/gm, '<h3 class="font-bold text-xl text-blue-900 mt-6 mb-3">$1</h3>')
                 .replace(/^&gt; (.*$)/gm, '<blockquote class="border-l-4 border-blue-400 pl-4 py-2 my-2 bg-blue-50 rounded-r">$1</blockquote>')
@@ -1146,14 +952,13 @@
                 .replace(/\n/g, '<br>');
         }
         
-        // ========== MAIN API CALL ==========
+        // ===== API CALL =====
         async function askQuestion() {
             const questionInput = document.getElementById('question');
             const question = questionInput.value.trim();
-            const apiKey = DEFAULT_API_KEY;
             
             if (!question) {
-                showToast(translations[currentLang].toastEmpty);
+                showToast(translations[currentLang].toastEmpty, '⚠️');
                 return;
             }
             
@@ -1162,44 +967,32 @@
             const chatMessages = document.getElementById('chatMessages');
             const welcomeSection = document.getElementById('welcomeSection');
             
-            // Create new chat if needed
-            if (!activeChatId) {
-                createChat(question);
-            }
-            
-            // Add user message
+            if (!activeChatId) createChat(question);
             addMessageToChat('user', question);
             
-            // Show chat area
             welcomeSection.classList.add('hidden');
             chatMessages.classList.remove('hidden');
+            renderMessages(getActiveChat().messages);
             
-            // Render current messages
-            const chat = getActiveChat();
-            renderMessages(chat.messages);
-            
-            // Show loading
             loadingState.classList.remove('hidden');
             askButton.disabled = true;
             questionInput.value = '';
-            
-            // Scroll to loading
             loadingState.scrollIntoView({ behavior: 'smooth', block: 'end' });
             
             try {
-                // Build messages array for API
+                const chat = getActiveChat();
                 const apiMessages = [
                     { role: 'system', content: SYSTEM_PROMPT },
                     ...chat.messages.map(m => ({ role: m.role, content: m.content }))
                 ];
                 
-                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`,
+                        'Authorization': `Bearer ${API_KEY}`,
                         'HTTP-Referer': window.location.href,
-                        'X-Title': 'Akyykat AI - Legal Assistant for Kyrgyzstan'
+                        'X-Title': 'Akyykat AI'
                     },
                     body: JSON.stringify({
                         model: MODEL,
@@ -1211,61 +1004,34 @@
                 
                 const data = await response.json();
                 
-                if (!response.ok) {
-                    throw new Error(data.error?.message || 'API Error');
+                // Обработка ошибки 429 (Too Many Requests)
+                if (response.status === 429) {
+                    throw new Error('OVERLOADED');
                 }
+                
+                if (!response.ok) throw new Error(data.error?.message || 'API Error');
                 
                 let aiResponse = data.choices[0]?.message?.content;
+                if (!aiResponse) throw new Error('Empty response');
                 
-                if (!aiResponse) {
-                    throw new Error('Empty response');
-                }
-                
-                // ===== CRITICAL: MULTI-PASS THINK TAG REMOVAL =====
-                // DeepSeek/R1 models send reasoning in <think> tags
-                
-                // Pass 1: Main filter function
-                aiResponse = filterThinkingTags(aiResponse);
-                
-                // Pass 2: Additional safety regex
-                aiResponse = aiResponse.replace(/<think[\s\S]*?(?:<\/think>|$)/gi, '');
-                aiResponse = aiResponse.replace(/<\/think>/gi, '');
-                
-                // Pass 3: If still starts with < (potential uncaught tag), clean more aggressively
-                while (aiResponse.startsWith('<') && !aiResponse.startsWith('<strong') && !aiResponse.startsWith('<em') && !aiResponse.startsWith('<p')) {
-                    const closeIdx = aiResponse.indexOf('>');
-                    if (closeIdx > 0 && closeIdx < 50) {
-                        aiResponse = aiResponse.substring(closeIdx + 1);
-                    } else {
-                        break;
-                    }
-                }
-                
-                // Pass 4: Remove any remaining think-related content
-                aiResponse = aiResponse.replace(/\[thinking\][\s\S]*?\[\/thinking\]/gi, '');
-                aiResponse = aiResponse.replace(/\*\*Thinking:\*\*[\s\S]*?\n\n/gi, '');
-                
-                // Final cleanup
-                aiResponse = aiResponse.replace(/^\s*\n+/, '').trim();
-                
-                // Safety: if response is empty after filtering, show error
-                if (!aiResponse || aiResponse.length < 10) {
-                    aiResponse = translations[currentLang].errorApi + ': Response was filtered completely. Please try again.';
-                }
-                
-                // Add AI response to chat
                 addMessageToChat('assistant', aiResponse);
-                
-                // Re-render messages
                 renderMessages(getActiveChat().messages);
-                
-                // Update chat list (title might have changed)
                 renderChatList();
                 
             } catch (error) {
                 console.error('Error:', error);
-                // Add error message
-                addMessageToChat('assistant', `❌ ${translations[currentLang].errorTitle || 'Error'}: ${error.message}`);
+                const t = translations[currentLang];
+                let errorMsg;
+                
+                if (error.message === 'OVERLOADED' || error.message.includes('429') || error.message.includes('rate') || error.message.includes('Too Many')) {
+                    errorMsg = t.errorOverloaded;
+                } else if (error.message.includes('fetch') || error.message.includes('network') || error.message.includes('Failed')) {
+                    errorMsg = t.errorNetwork;
+                } else {
+                    errorMsg = `❌ ${error.message}`;
+                }
+                
+                addMessageToChat('assistant', errorMsg);
                 renderMessages(getActiveChat().messages);
             } finally {
                 loadingState.classList.add('hidden');
@@ -1273,7 +1039,7 @@
             }
         }
         
-        // ========== EVENT LISTENERS ==========
+        // ===== EVENTS =====
         document.getElementById('question').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault();
@@ -1281,14 +1047,10 @@
             }
         });
         
-        // Handle resize
         window.addEventListener('resize', () => {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            
             if (window.innerWidth >= 1024) {
-                sidebar.classList.remove('open');
-                overlay.classList.add('hidden');
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.add('hidden');
                 document.body.style.overflow = '';
             }
         });
